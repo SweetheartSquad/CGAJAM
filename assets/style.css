@@ -1,0 +1,45 @@
+*{
+}
+
+html,body,#display{
+	padding:0;
+	margin:0;
+	
+	width:100%;
+	height:100%;
+
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+
+	background:#FFFFFF;
+	color:#FFFFFF;
+
+	overflow:hidden;
+
+	min-width: 400px;
+	min-height: 300px;
+
+	/*cursor:none;*/
+}
+
+html{
+	overflow:hidden;
+}
+
+canvas{
+	image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+
+	position:absolute;
+	margin:auto;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
