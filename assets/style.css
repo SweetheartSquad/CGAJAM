@@ -1,4 +1,12 @@
+@font-face {
+  font-family: 'font';
+  font-style: normal;
+  font-weight: normal;
+  src: url('font/Amaranth-Regular.otf');
+}
+
 *{
+	font-family: 'font';
 }
 
 html,body,#display{

@@ -10,7 +10,7 @@ try{
 }
 var resizeTimeout=null;
 
-var size={x:1920,y:1080};
+var size={x:1280,y:720};
 
 var sounds=[];
 
@@ -84,7 +84,11 @@ $(document).ready(function(){
 	CustomFilter.prototype.constructor = CustomFilter;
 	PIXI.loader
 		.add('vert','assets/passthrough.vert')
-		.add('bg','assets/1453-render_1040.jpg')
+		.add('bg','assets/1453-render_1040.png')
+		.add('ship','assets/ship.png')
+		.add('ship2','assets/ship2.png')
+		.add('ship3','assets/ship3.png')
+		.add('mansion','assets/mansion.png')
 		.add('vid','assets/Converge/ezgif.com-gif-to-mp4.mp4', {
 			loadType: PIXI.loaders.Resource.LOAD_TYPE.VIDEO
 		})

@@ -9,7 +9,6 @@ float greenScreen(vec3 _col){
     return step(_col.g - (_col.r + _col.b),0.3);
 }
 
-uniform vec4 dimensions;
 void main(void){
     vec2 uv = vTextureCoord.xy;
 
@@ -28,15 +27,15 @@ void main(void){
         a = max(a, greenScreen(texture2D(uSampler, _uv).rgb));
     }
     }
-    vec3 outlineColour = vec3(1.0);
+    vec3 outlineColour = vec3(1.0, 0.95, 0.95);
 
-    vec3 col = texture2D(uSampler, uv).rgb;
+    vec4 col = texture2D(uSampler, uv);
 
 
     // main layer
-    a = max(a, greenScreen(col));
-    col = mix(outlineColour, col, greenScreen(col));
+    a = max(a, greenScreen(col.rgb));
+    col.rgb = mix(outlineColour, col.rgb, greenScreen(col.rgb));
     
     // output
-    gl_FragColor = vec4(col, 1.0) * a; // requires pre-multiplied alpha
+    gl_FragColor = col * a; // requires pre-multiplied alpha
 }

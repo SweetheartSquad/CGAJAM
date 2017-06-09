@@ -63,3 +63,13 @@ function range(_start, _end, _by){
 	}
 	return res;
 }
+
+
+// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+function componentToHex(c) {
+    var hex = clamp(0,Math.floor(c),255).toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+function rgbToHex(r, g, b) {
+    return parseInt("0x" + componentToHex(r) + componentToHex(g) + componentToHex(b));
+}
