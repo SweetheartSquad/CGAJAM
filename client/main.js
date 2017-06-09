@@ -13,6 +13,8 @@ function main(){
 }
 
 offWhite = rgbToHex(1.0*255, 0.95*255, 0.95*255);
+linkHover = rgbToHex(110,110,110);
+linkNormal = rgbToHex(0.92*255,0.92*255,255);
 
 function init(){
 
@@ -20,6 +22,11 @@ function init(){
 	keys.init();
 	keys.capture = [keys.LEFT,keys.RIGHT,keys.UP,keys.DOWN,keys.SPACE,keys.ENTER,keys.BACKSPACE,keys.ESCAPE,keys.W,keys.A,keys.S,keys.D,keys.P,keys.M];
 	gamepads.init();
+	mouse.init("section#display canvas");
+	scaledMouse = {
+		x:0,
+		y:0
+	};
 
 	// setup screen filter
 	screen_filter = new CustomFilter(PIXI.loader.resources.vert.data, PIXI.loader.resources.screen_shader.data);
@@ -126,7 +133,7 @@ function init(){
 
 	video.container.alpha = 0;
 
-	var source="Of course everything is going wrong on your vacation. You get away from the [base] for a five day getaway in the hostoric [foothills] of Charon and you're one day behind, two suitcases short, and three hundred thousand miles from the bed and [breakfast] you booked. You're only just now passing Venus.";
+	var source="Of course everything is going wrong on [[your vacation|VACATION]]. You get away from the base for a five day getaway in the historic foothills of Charon and you're one day behind, two suitcases short, and three hundred thousand miles from the bed and [[breakfast|FOOD]] you booked. You're only just now passing Venus.";
 	
 	//var r=/\[(.*?)\]/g;
 	//s=s.split(r);
@@ -142,78 +149,125 @@ function init(){
 	font = {
 		fontFamily: "font",
 		fontSize: 24,
-		fill: "#"+offWhite.toString(16),
+		lineHeight: 30,
+		fill: "#FFFFFF",
 		align: "left",
 		textBaseline: "alphabetic"
 	};
 
 
 	textContainer = new PIXI.Container();
-	source = source.split(' ');
+
+	// break out links
+	regexSource = /\[\[\s*(.*?)\s*\]\]/g;
+	source = source.split(regexSource);
+
+	console.log(source);
+
+	// create word list
+	// (links are always one "word")
+	words = [];
+	for(var i = 0; i < source.length; ++i){
+		if(i %2 == 0){
+			var w = source[i].trim().split(' ');
+			for(var j = 0; j < w.length; ++j){
+				words.push(w[j]);
+			}
+		}else{
+			var link = source[i].split('|');
+			words.push({
+				link: link[1],
+				text: link[0],
+				whitespace: source[i+1].substr(0,1).trim().length === 0
+			});
+		}
+	}
+	console.log(words);
 	{
 		var temp = new PIXI.Text("",font);
-		var string = "";
+		var line = "";
 		var texts = [];
 		var y = 0;
 		var x = 0;
-		for(var i = 0; i < source.length; ++i){
-			var s = source[i];
-			var link = s.substr(0,1) == "[" && s.substr(-1) == "]";
-			var o = (link ? s.substr(1,s.length-2) : s)
-			temp.text = string + " " + o;
+		for(var i = 0; i < words.length; ++i){
+			var word = words[i];
+			var isLink = word.hasOwnProperty('link');
+			var wordText = (isLink ? word.text : word);
+
+			if(line.trim().length > 0){
+				line += ' ';
+			}
+
+			temp.text = line + wordText;
 			if(x + temp.wrappy() > size.x/2){
 				// wrap a line
-				temp.text = string;
+				temp.text = line;
 				texts.push(temp);
 				temp.y = y;
 				temp.x = x;
 
-				string = "";
-				y += font.fontSize;
+				line = "";
+				y += font.lineHeight;
 				x = 0;
 				
 				temp = new PIXI.Text("",font);
 			}
 			// append to current line
-			if(link){
-				// end line early
-				temp.text = string + " ";
-				texts.push(temp);
-				temp.y = y;
-				temp.x = x;
-				x += temp.wrappy();
+			if(isLink){
+				if(line){
+					// end line early
+					temp.text = line;
+					texts.push(temp);
+					temp.y = y;
+					temp.x = x;
+					x += temp.wrappy();
+				}else{
+					temp.destroy();
+				}
 
 				// add section with link
-				temp = new PIXI.Text(o,font);
+				temp = new PIXI.Text(wordText,font);
 				temp.x = x;
 				temp.y = y;
-				temp.tint = 0x0000FF;
+				temp.link = word.link;
+				temp.onclick = function(){
+					this.text = this.link;
+				}.bind(temp);
 				texts.push(temp);
 				x += temp.wrappy();
 				//temp.scale.x = temp.scale.y = 1.5;
 
 				// continue with new line
-				string = "";
+				line = word.whitespace ? " " : "";
 				temp = new PIXI.Text("",font);
 			}else{
-				string += " " + o;
+				line += wordText;
 			}
 
 		}
-		if(string.length > 0){
-			temp.text = string;
+		// add the last line if we have leftovers
+		if(line.length > 0){
+			temp.text = line;
 			texts.push(temp);
 			temp.y = y;
 			temp.x = x;
 		}
+
+		// add text objects
+		links = [];
 		for(var i= 0; i < texts.length; ++i){
 			textContainer.addChild(texts[i]);
+			texts[i].tint = offWhite;
+			if (texts[i].link) {
+				links.push(texts[i]);
+			}
 			// setInterval(function(i){
 			// 	this.rotation=Math.sin(i+curTime/100)/50;
 			// }.bind(texts[i],i),-1);
 		}
 		textContainer.x = size.x/4;
 		textContainer.y = size.y*0.6;
+		textContainer.interactiveChildren = true;
 	}
 
 	// t = new PIXI.Text(s.join(''), {
@@ -277,6 +331,28 @@ function update(){
 		setBg("mansion");
 	}
 
+	for(var i = 0; i < links.length; ++i){
+		links[i].tint = linkNormal;
+
+		var p = links[i].toGlobal(PIXI.zero);
+
+		if(intersect(scaledMouse, {
+			x:p.x,
+			y:p.y,
+			width:links[i].width,
+			height:links[i].height
+		})){
+			links[i].tint = linkHover;
+
+			if(mouse.isDown()){
+				links[i].scale.x = links[i].scale.y = 1.5;
+			}
+			if(mouse.isJustDown()){
+				links[i].onclick();
+			}
+		}
+	}
+
 	if(!isNaN(video.container.targetAlpha)) {
 		video.container.alpha = lerp(video.container.alpha, video.container.targetAlpha,0.05);
 	}
@@ -284,6 +360,9 @@ function update(){
 	// update input managers
 	keys.update();
 	gamepads.update();
+	mouse.update();
+	scaledMouse.x = mouse.pos.x / scaleMultiplier;
+	scaledMouse.y = mouse.pos.y / scaleMultiplier;
 }
 
 function render(){

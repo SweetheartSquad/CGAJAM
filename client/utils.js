@@ -73,3 +73,13 @@ function componentToHex(c) {
 function rgbToHex(r, g, b) {
     return parseInt("0x" + componentToHex(r) + componentToHex(g) + componentToHex(b));
 }
+
+
+function intersect(__point,__rect){
+	return (
+		__point.x > __rect.x &&
+		__point.x < __rect.x + __rect.width &&
+		__point.y > __rect.y &&
+		__point.y < __rect.y + __rect.height
+	);
+}
