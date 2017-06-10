@@ -390,7 +390,7 @@ function update(){
 }
 
 function render(){
-	screen_filter.uniforms["uTime"] = curTime/1000;
+	screen_filter.uniforms["uTime"] = curTime/1000.0%1000.0; // provide time in seconds (range 0-1000)
 	greenScreen_filter.uniforms["uSpriteSize"] = [video.sprite.width,video.sprite.height];
 	greenScreen_filter.uniforms["uBufferSize"] = [nextPowerOfTwo(video.sprite.width),nextPowerOfTwo(video.sprite.height)];
 	renderer.render(game,renderTexture,true,false);
