@@ -133,7 +133,7 @@ function init(){
 
 	video.container.alpha = 0;
 
-	var source="Of course everything is going wrong on [[your vacation|VACATION]]. You get away from the base for a five day getaway in the historic foothills of Charon and you're one day behind, two suitcases short, and three hundred thousand miles from the bed and [[breakfast|FOOD]] you booked. You're only just now passing Venus.";
+	var source=PIXI.loader.resources.source.data;
 	
 	//var r=/\[(.*?)\]/g;
 	//s=s.split(r);
@@ -158,8 +158,12 @@ function init(){
 
 	textContainer = new PIXI.Container();
 
+	// remove unneeded \r characters
+	source = source.replace(/[\r]/g,'');
+
 	// break out links
-	regexSource = /\[\[\s*(.*?)\s*\]\]/g;
+	// result will be an array in format [text,space,link, text,space,link, ...]
+	regexSource = /(\s)*?\[\[(.*?)\]\]?/g;
 	source = source.split(regexSource);
 
 	console.log(source);
@@ -168,21 +172,31 @@ function init(){
 	// (links are always one "word")
 	words = [];
 	for(var i = 0; i < source.length; ++i){
-		if(i %2 == 0){
-			var w = source[i].trim().split(' ');
-			for(var j = 0; j < w.length; ++j){
-				words.push(w[j]);
+		if(i %3 != 2){ // link check
+			if(source[i]){
+				// split text into array of words/whitespace
+				var w = source[i].split(/([ \n])/g);
+				for(var j = 0; j < w.length; ++j){
+					words.push(w[j]);
+				}
 			}
 		}else{
+			// link
 			var link = source[i].split('|');
 			words.push({
 				link: link[1],
-				text: link[0],
-				whitespace: source[i+1].substr(0,1).trim().length === 0
+				text: link[0]
 			});
 		}
 	}
+	// clear out empty entries
+	for(var i = words.length-1; i >= 0; --i){
+		if(!words[i]){
+			words.splice(i,1);
+		}
+	}
 	console.log(words);
+	// convert to text objects
 	{
 		var temp = new PIXI.Text("",font);
 		var line = "";
@@ -193,13 +207,12 @@ function init(){
 			var word = words[i];
 			var isLink = word.hasOwnProperty('link');
 			var wordText = (isLink ? word.text : word);
-
-			if(line.trim().length > 0){
-				line += ' ';
+			if(wordText.length <= 0){
+				continue;
 			}
 
 			temp.text = line + wordText;
-			if(x + temp.wrappy() > size.x/2){
+			if(x + temp.wrappy() > size.x/2 || wordText === '\n'){
 				// wrap a line
 				temp.text = line;
 				texts.push(temp);
@@ -209,6 +222,8 @@ function init(){
 				line = "";
 				y += font.lineHeight;
 				x = 0;
+
+				wordText = wordText.trim();
 				
 				temp = new PIXI.Text("",font);
 			}
@@ -231,17 +246,17 @@ function init(){
 				temp.y = y;
 				temp.link = word.link;
 				temp.onclick = function(){
-					this.text = this.link;
+					console.log('Clicked link: ',this.text,'\n','Running: ',this.link);
+					eval(this.link);
 				}.bind(temp);
 				texts.push(temp);
 				x += temp.wrappy();
-				//temp.scale.x = temp.scale.y = 1.5;
 
 				// continue with new line
-				line = word.whitespace ? " " : "";
+				line = "";
 				temp = new PIXI.Text("",font);
 			}else{
-				line += wordText;
+				line += wordText.replace(/[\n]/g,'');
 			}
 
 		}
@@ -256,35 +271,20 @@ function init(){
 		// add text objects
 		links = [];
 		for(var i= 0; i < texts.length; ++i){
+			if(texts[i].text.length <= 0){
+				texts[i].destroy();
+				continue;
+			}
 			textContainer.addChild(texts[i]);
 			texts[i].tint = offWhite;
 			if (texts[i].link) {
 				links.push(texts[i]);
 			}
-			// setInterval(function(i){
-			// 	this.rotation=Math.sin(i+curTime/100)/50;
-			// }.bind(texts[i],i),-1);
 		}
 		textContainer.x = size.x/4;
 		textContainer.y = size.y*0.6;
 		textContainer.interactiveChildren = true;
 	}
-
-	// t = new PIXI.Text(s.join(''), {
-	// 	fontFamily: "font",
-	// 	fontSize: 24,
-	// 	fill: "#"+offWhite.toString(16),
-	// 	align: "left",
-	// 	textBaseline: "alphabetic",
-	// 	wordWrap: true,
-	// 	wordWrapWidth: size.x*0.5
-	// });
-	// setTimeout(function(){
-	// 	t.text += "2";
-	// },1000);
-
-	// t.y = size.y * 0.6;
-	// t.x = size.x * 0.25;
 
 	game.addChild(bg);
 	game.addChild(textContainer);
@@ -344,9 +344,6 @@ function update(){
 		})){
 			links[i].tint = linkHover;
 
-			if(mouse.isDown()){
-				links[i].scale.x = links[i].scale.y = 1.5;
-			}
 			if(mouse.isJustDown()){
 				links[i].onclick();
 			}

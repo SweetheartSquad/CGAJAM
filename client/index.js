@@ -83,6 +83,7 @@ $(document).ready(function(){
 	CustomFilter.prototype = Object.create(PIXI.Filter.prototype);
 	CustomFilter.prototype.constructor = CustomFilter;
 	PIXI.loader
+		.add('source','assets/source.txt')
 		.add('vert','assets/passthrough.vert')
 		.add('bg','assets/1453-render_1040.png')
 		.add('ship','assets/ship.png')
