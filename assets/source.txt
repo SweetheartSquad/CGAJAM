@@ -1,7 +1,15 @@
-API TEST
-[[Show video|this.showVideo();]]
-[[Hide video|this.hideVideo();]]
-[[Random background|var a=['mansion','bg','ship','ship2','ship3'];this.setBg(a[Math.floor(Math.random()*a.length)]);]]
+hey here's some garbo that shouldn't get parsed
+
+::START
+This is the start menu
+
+[[options|this.goto('OPTIONS');]]
+[[api test|this.goto('API TEST');]]
+
+::OPTIONS
+Palette: [[CGA0|this.enableShader();this.setPalette(0);]] [[CGA1|this.enableShader();this.setPalette(1);]] [[N/A|this.disableShader();]]
+Scaling: [[1:1|scaleMode=2;_resize();]] [[scale-to-fit|scaleMode=1;_resize();]] [[scale-in-multiples|scaleMode=0;_resize();]]
+[[back|this.back()]]
 
 ::PARAGRAPH TEST
 This is a paragraph test.
