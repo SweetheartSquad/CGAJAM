@@ -134,155 +134,8 @@ function init(){
 
 	video.container.alpha = 0;
 
-	var source=PIXI.loader.resources.source.data;
-	
-	//var r=/\[(.*?)\]/g;
-	//s=s.split(r);
-	console.log(source);
-
-	PIXI.Text.prototype.wrappy = function(){
-		this.context.font = this.style.font;
- 
-	    var outputText = this.text;
-	 	return this.context.measureText(outputText).width;
-	}
-
-	font = {
-		fontFamily: "font",
-		fontSize: 24,
-		lineHeight: 30,
-		fill: "#FFFFFF",
-		align: "left",
-		textBaseline: "alphabetic"
-	};
-
-
 	textContainer = new PIXI.Container();
-
-	// remove unneeded \r characters
-	source = source.replace(/[\r]/g,'');
-
-	// break out links
-	// result will be an array in format [text,space,link, text,space,link, ...]
-	regexSource = /(\s)*?\[{2}(.*?)\]{2}?/g;
-	source = source.split(regexSource);
-
-	console.log(source);
-
-	// create word list
-	// (links are always one "word")
-	words = [];
-	for(var i = 0; i < source.length; ++i){
-		if(i %3 != 2){ // link check
-			if(source[i]){
-				// split text into array of words/whitespace
-				var w = source[i].split(/([ \n])/g);
-				for(var j = 0; j < w.length; ++j){
-					words.push(w[j]);
-				}
-			}
-		}else{
-			// link
-			var link = source[i].split('|');
-			words.push({
-				link: link[1],
-				text: link[0]
-			});
-		}
-	}
-	// clear out empty entries
-	for(var i = words.length-1; i >= 0; --i){
-		if(!words[i]){
-			words.splice(i,1);
-		}
-	}
-	console.log(words);
-	// convert to text objects
-	{
-		var temp = new PIXI.Text("",font);
-		var line = "";
-		var texts = [];
-		var y = 0;
-		var x = 0;
-		for(var i = 0; i < words.length; ++i){
-			var word = words[i];
-			var isLink = word.hasOwnProperty('link');
-			var wordText = (isLink ? word.text : word);
-			if(wordText.length <= 0){
-				continue;
-			}
-
-			temp.text = line + wordText;
-			if(x + temp.wrappy() > size.x/2 || wordText === '\n'){
-				// wrap a line
-				temp.text = line;
-				texts.push(temp);
-				temp.y = y;
-				temp.x = x;
-
-				line = "";
-				y += font.lineHeight;
-				x = 0;
-
-				wordText = wordText.trim();
-				
-				temp = new PIXI.Text("",font);
-			}
-			// append to current line
-			if(isLink){
-				if(line){
-					// end line early
-					temp.text = line;
-					texts.push(temp);
-					temp.y = y;
-					temp.x = x;
-					x += temp.wrappy();
-				}else{
-					temp.destroy();
-				}
-
-				// add section with link
-				temp = new PIXI.Text(wordText,font);
-				temp.x = x;
-				temp.y = y;
-				temp.link = word.link;
-				temp.onclick = Game.onLinkClicked;
-				texts.push(temp);
-				x += temp.wrappy();
-
-				// continue with new line
-				line = "";
-				temp = new PIXI.Text("",font);
-			}else{
-				line += wordText.replace(/[\n]/g,'');
-			}
-
-		}
-		// add the last line if we have leftovers
-		if(line.length > 0){
-			temp.text = line;
-			texts.push(temp);
-			temp.y = y;
-			temp.x = x;
-		}
-
-		// add text objects
-		links = [];
-		for(var i= 0; i < texts.length; ++i){
-			if(texts[i].text.length <= 0){
-				texts[i].destroy();
-				continue;
-			}
-			textContainer.addChild(texts[i]);
-			texts[i].tint = offWhite;
-			if (texts[i].link) {
-				links.push(texts[i]);
-			}
-		}
-		textContainer.x = size.x/4;
-		textContainer.y = size.y*3/4 - textContainer.height/2;
-		textContainer.interactiveChildren = true;
-	}
+	textContainer.x = size.x/4;
 
 	game.addChild(bg);
 	game.addChild(textContainer);
@@ -315,6 +168,12 @@ function init(){
 	}
 	game.addChild(video.container);
 
+	// parse source
+	passages = parseSource(PIXI.loader.resources.source.data);
+	// create game and goto starting passage
+	api = new Game();
+	api.goto('START');
+
 	// start the main loop
 	main();
 }
@@ -333,45 +192,52 @@ function update(){
 	var inputs = getInputs();
 
 	if(keys.isDown(keys.A)){
-		video.container.targetAlpha = 1.0;
+		api.showVideo();
 	}
 	if(keys.isDown(keys.S)){
-		video.container.targetAlpha = 0;
+		api.hideVideo();
 	}
 
 	if(keys.isDown(keys.B)){
-		setBg("ship");
+		api.setBg("ship");
 	}
 	if(keys.isDown(keys.M)){
-		setBg("ship2");
+		api.setBg("ship2");
 	}
 	if(keys.isDown(keys.V)){
-		setBg("ship3");
+		api.setBg("ship3");
 	}
 	if(keys.isDown(keys.N)){
-		setBg("bg");
+		api.setBg("bg");
 	}
 	if(keys.isDown(keys.C)){
-		setBg("mansion");
+		api.setBg("mansion");
 	}
 
-	for(var i = 0; i < links.length; ++i){
-		links[i].tint = linkNormal;
-
-		var p = links[i].toGlobal(PIXI.zero);
+	// copy of current passage links
+	// (don't use them directly since they may change on click)
+	var links = []; 
+	for(var i = 0; i < api.currentPassage.links.length; ++i){
+		var link = api.currentPassage.links[i];
+		var p = link.toGlobal(PIXI.zero);
 
 		if(intersect(scaledMouse, {
 			x:p.x,
 			y:p.y,
-			width:links[i].width,
-			height:links[i].height
+			width:link.width,
+			height:link.height
 		})){
-			links[i].tint = linkHover;
+			link.tint = linkHover;
 
 			if(mouse.isJustDown()){
-				links[i].onclick();
+				links.push(link.onclick.bind(link));
 			}
+		} else {
+			link.tint = linkNormal;
 		}
+	}
+	for(var i = 0; i < links.length; ++i){
+		links[i]();
 	}
 
 	if(!isNaN(video.container.targetAlpha)) {
@@ -456,7 +322,11 @@ function getInputs(){
 
 
 function Game(){
-
+	this.currentPassage = {
+		text:[],
+		links:[]
+	};
+	this.history = [];
 }
 
 Game.prototype.eval = function(__script) {
@@ -492,8 +362,211 @@ Game.prototype.setPalette = function(__palette){
 	screen_filter.uniforms["palette"] = __palette;
 };
 
-api = new Game();
+Game.prototype.goto = function(__passage) {
+	console.log('Going to passage:',__passage);
+	
+	// remove existing passage
+	var oldText = textContainer.removeChildren();
+	for(var i = 0; i < oldText.length; ++i){
+		oldText[i].destroy();
+	}
+
+	// parse requested passage
+	this.history.push(this.currentPassage.title);
+	this.currentPassage = passageToText(parsePassage(passages[__passage]));
+	this.currentPassage.title = __passage;
+
+	// add parsed passage
+	for(var i = 0; i < this.currentPassage.text.length; ++i){
+		textContainer.addChild(this.currentPassage.text[i]);
+	}
+	// re-center text
+	textContainer.y = size.y*3/4 - textContainer.height/2;
+};
+
+Game.prototype.back = function() {
+	this.goto(this.history.pop()); // goto the last thing in history
+	this.history.pop(); // remove the last thing in history (i.e. don't get stuck in a loop)
+};
+
 Game.onLinkClicked = function(){
 	console.log('Clicked link: ',this.text,'\n','Running: ',this.link);
 	api.eval(this.link);
 };
+
+
+
+
+
+
+
+
+
+
+
+// parser
+PIXI.Text.prototype.measureWidth = function(__text){
+	this.context.font = this.style.font;
+ 	return this.context.measureText(__text).width;
+}
+function parseSource(__source){
+	// remove unneeded \r characters
+	__source = __source.replace(/[\r]/g,'');
+
+	console.log('Parsing source:',__source);
+
+	return parsePassages(__source);
+}
+
+function parsePassages(__source) {
+	// split passages apart
+	// passages are in format:
+	// ::PASSAGE TITLE
+	// passage contents
+	var passageRegex = /:{2}(.*)\n/g;
+	var passages = {};
+
+	var p = __source.split(passageRegex);
+	p.shift(); // remove the first element, which is all text above first passage title
+	console.debug(p);
+
+	// associate passage bodies to passage titles
+	for(var i = 0; i < p.length; i += 2){
+		passages[p[i]] = p[i+1];
+	}
+
+	console.log('Parsed passages:',passages);
+	return passages;
+}
+
+function parsePassage(__source){
+
+	// break out links (links are inside double square brackets, i.e. [[link]] )
+	// result will be an array in format [plain-text,whitespace,link, plain-text,whitespace,link, ...]
+	// note: not 
+	regexSource = /(\s)*?\[{2}(.*?)\]{2}/g;
+	__source = __source.split(regexSource);
+
+	console.debug(__source);
+	// create word list
+	// (links are always one "word")
+	var words = [];
+	for(var i = 0; i < __source.length; ++i){
+		if(i%3 != 2){ // link check
+			if(__source[i]){
+				// split plain-text into array of words/whitespace
+				var w = __source[i].split(/([ \n])/g);
+				for(var j = 0; j < w.length; ++j){
+					words.push(w[j]);
+				}
+			}
+		}else{
+			// link
+			var link = __source[i].split('|');
+			words.push({
+				link: link[1],
+				text: link[0]
+			});
+		}
+	}
+	// clear out empty entries
+	for(var i = words.length-1; i >= 0; --i){
+		if(!words[i]){
+			words.splice(i,1);
+		}
+	}
+	return words;
+}
+
+// go through passage contents and convert to text objects
+// and interactive elements
+function passageToText(__passage) {
+	var font = {
+		fontFamily: "font",
+		fontSize: 24,
+		lineHeight: 30,
+		fill: "#FFFFFF",
+		align: "left",
+		textBaseline: "alphabetic"
+	};
+	var temp = new PIXI.Text("",font);
+	var line = "";
+	var passage = {
+		text: [],
+		links: []
+	};
+	var y = 0;
+	var x = 0;
+	for(var i = 0; i < __passage.length; ++i){
+		var word = __passage[i];
+		var isLink = word.hasOwnProperty('link');
+		var wordText = (isLink ? word.text : word);
+		if(wordText.length <= 0){
+			continue;
+		}
+
+		if(x + temp.measureWidth(line + wordText) > size.x/2 || wordText === '\n'){
+			// wrap a line
+			temp.text = line;
+			passage.text.push(temp);
+			temp.y = y;
+			temp.x = x;
+
+			line = "";
+			y += font.lineHeight;
+			x = 0;
+
+			wordText = wordText.trim();
+			
+			temp = new PIXI.Text("",font);
+		}
+		// append to current line
+		if(isLink){
+			if(line){
+				// end line early
+				temp.text = line;
+				passage.text.push(temp);
+				temp.y = y;
+				temp.x = x;
+				x += temp.measureWidth(temp.text);
+			}else{
+				temp.destroy();
+			}
+
+			// add section with link
+			temp = new PIXI.Text(wordText,font);
+			temp.x = x;
+			temp.y = y;
+			temp.link = word.link;
+			temp.onclick = Game.onLinkClicked;
+			passage.text.push(temp);
+			x += temp.measureWidth(temp.text);
+
+			// continue with new line
+			line = "";
+			temp = new PIXI.Text("",font);
+		}else{
+			line += wordText.replace(/[\n]/g,'');
+		}
+
+	}
+	// add the last line if we have leftovers
+	if(line.length > 0){
+		temp.text = line;
+		passage.text.push(temp);
+		temp.y = y;
+		temp.x = x;
+	}
+
+	// add text objects
+	for(var i= 0; i < passage.text.length; ++i){
+		if(passage.text[i].text.length <= 0){
+			passage.text[i].renderable = false;
+		}
+		passage.text[i].tint = offWhite;
+		if (passage.text[i].link) {
+			passage.links.push(passage.text[i]);
+		}
+	}
+	return passage;
+}
