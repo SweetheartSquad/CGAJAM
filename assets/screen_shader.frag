@@ -18,7 +18,7 @@ const vec3 red = vec3(on, off, off);
 const vec3 green = vec3(off, on, off);
 const vec3 yellow = vec3(on, on, off);
 
-float palette = 0.0; // 0 -> 1 == CGA1 -> CGA1
+uniform float palette; // 0 -> 1 == CGA1 -> CGA1
 float brightness = 0.75; // overall brightness threshold
 
 // amount of black around palette edges 

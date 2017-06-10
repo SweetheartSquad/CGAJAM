@@ -246,10 +246,7 @@ function init(){
 				temp.x = x;
 				temp.y = y;
 				temp.link = word.link;
-				temp.onclick = function(){
-					console.log('Clicked link: ',this.text,'\n','Running: ',this.link);
-					eval(this.link);
-				}.bind(temp);
+				temp.onclick = Game.onLinkClicked;
 				texts.push(temp);
 				x += temp.wrappy();
 
@@ -458,11 +455,45 @@ function getInputs(){
 
 
 
+function Game(){
 
-function setBg(__bg) {
+}
+
+Game.prototype.eval = function(__script) {
+	(function(__s){return eval(__s);}).call(this, __script);
+};
+
+// API
+Game.prototype.setBg = function(__bg) {
 	bg.texture = video.bg.texture = PIXI.loader.resources[__bg].texture;
-}
+};
 
-function setVideo(__video) {
+Game.prototype.setVideo = function(__video) {
 
-}
+};
+
+Game.prototype.showVideo = function() {
+	video.container.targetAlpha = 1.0;
+};
+
+Game.prototype.hideVideo = function() {
+	video.container.targetAlpha = 0.0;
+};
+
+Game.prototype.enableShader = function(){
+	renderSprite.filters = [screen_filter];
+};
+
+Game.prototype.disableShader = function(){
+	renderSprite.filters = [];
+};
+
+Game.prototype.setPalette = function(__palette){
+	screen_filter.uniforms["palette"] = __palette;
+};
+
+api = new Game();
+Game.onLinkClicked = function(){
+	console.log('Clicked link: ',this.text,'\n','Running: ',this.link);
+	api.eval(this.link);
+};

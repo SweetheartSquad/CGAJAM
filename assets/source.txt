@@ -1,3 +1,8 @@
+API TEST
+[[Show video|this.showVideo();]]
+[[Hide video|this.hideVideo();]]
+[[Random background|var a=['mansion','bg','ship','ship2','ship3'];this.setBg(a[Math.floor(Math.random()*a.length)]);]]
+
 This is a paragraph test.
 
-Of course everything is going wrong on [[your vacation|setBg("ship2");]]. You get away from the base for a five day getaway in the historic foothills of Charon and you're one day [[behind| ]], two suitcases short, and three hundred thousand [[miles| ]] from the bed and breakfast you booked. [[You're| ]] only just now passing Venus.
+Of course everything is going wrong on [[your vacation|this.setBg("ship2");]]. You get away from the base for a five day getaway in the historic foothills of Charon and you're one day [[behind| ]], two suitcases short, and three hundred thousand [[miles| ]] from the bed and breakfast you booked. [[You're| ]] only just now passing Venus.
