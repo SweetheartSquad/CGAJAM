@@ -164,7 +164,7 @@ function init(){
 
 	// break out links
 	// result will be an array in format [text,space,link, text,space,link, ...]
-	regexSource = /(\s)*?\[\[(.*?)\]\]?/g;
+	regexSource = /(\s)*?\[{2}(.*?)\]{2}?/g;
 	source = source.split(regexSource);
 
 	console.log(source);
