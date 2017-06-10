@@ -32,6 +32,7 @@ function init(){
 	screen_filter = new CustomFilter(PIXI.loader.resources.vert.data, PIXI.loader.resources.screen_shader.data);
 	screen_filter.padding = 0;
 	screen_filter.uniforms["uTime"] = 0;
+	screen_filter.uniforms["palette"] = 0.0;
 
 	// setup greenscreen filter
 	greenScreen_filter = new CustomFilter(PIXI.loader.resources.vert.data, PIXI.loader.resources.greenScreen_shader.data);
@@ -106,7 +107,7 @@ function init(){
 	{
 		var g = new PIXI.Graphics();
 		g.beginFill(0,0);
-		g.lineStyle(40, offWhite, 1);
+		g.lineStyle(40, 0, 1);
 		g.moveTo(0,0);
 		g.lineTo(0,mask.h);
 		g.lineTo(mask.w,mask.h);
@@ -114,7 +115,7 @@ function init(){
 		g.lineTo(0,0);
 		g.endFill();
 		g.beginFill(0,0);
-		g.lineStyle(20, 0, 1);
+		g.lineStyle(20, offWhite, 1);
 		g.moveTo(0,0);
 		g.lineTo(0,mask.h);
 		g.lineTo(mask.w,mask.h);
@@ -282,14 +283,40 @@ function init(){
 			}
 		}
 		textContainer.x = size.x/4;
-		textContainer.y = size.y*0.6;
+		textContainer.y = size.y*3/4 - textContainer.height/2;
 		textContainer.interactiveChildren = true;
 	}
 
 	game.addChild(bg);
 	game.addChild(textContainer);
+	// bg border
+	{
+		var g = new PIXI.Graphics();
+		g.beginFill(0,0);
+		g.lineStyle(10, offWhite, 1);
+		g.moveTo(0,size.y/2);
+		g.lineTo(size.x,size.y/2);
+		g.endFill();
+		g.beginFill(0,0);
+		g.lineStyle(40, offWhite, 1);
+		g.moveTo(0,0);
+		g.lineTo(0,size.y);
+		g.lineTo(size.x,size.y);
+		g.lineTo(size.x,0);
+		g.lineTo(0,0);
+		g.endFill();
+		g.beginFill(0,0);
+		g.lineStyle(20, 0, 1);
+		g.moveTo(0,0);
+		g.lineTo(0,size.y);
+		g.lineTo(size.x,size.y);
+		g.lineTo(size.x,0);
+		g.lineTo(0,0);
+		g.endFill();
+		game.addChild(new PIXI.Sprite(g.generateTexture()));
+		g.destroy();
+	}
 	game.addChild(video.container);
-	
 
 	// start the main loop
 	main();
