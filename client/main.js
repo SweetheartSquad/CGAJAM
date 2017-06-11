@@ -271,6 +271,10 @@ function update(){
 		video.container.alpha = lerp(video.container.alpha, video.container.targetAlpha,0.05);
 	}
 
+	if(!isNaN(textContainer.targetAlpha)) {
+		textContainer.alpha = lerp(textContainer.alpha, textContainer.targetAlpha,0.05);
+	}
+
 	// update input managers
 	keys.update();
 	gamepads.update();
@@ -355,10 +359,39 @@ function Game(){
 		title:null
 	};
 	this.history = [];
+	this.busy = false;
 }
 
+// flags as busy, and returns a promise
+// if already busy when called, promise will be in fail-state
+Game.prototype.startAction = function() {
+	return new Promise(function(__resolve, __reject) {
+		if (this.busy) {
+			__reject('startAction failed because already busy');
+		}
+		this.busy = true;
+		__resolve();
+	}.bind(this));
+};
+
+// unflags as busy, and returns a promise
+// if not busy when called, promise will be in fail-state
+Game.prototype.endAction = function() {
+	return new Promise(function(__resolve, __reject) {
+		if (!this.busy) {
+			__reject('endAction failed because not busy');
+		}
+		this.busy = false;
+		__resolve();
+	}.bind(this));
+};
+
 Game.prototype.eval = function(__script) {
-	(function(__s){return eval(__s);}).call(this, __script);
+	this.startAction()
+	.then(function(__s){
+		return eval(__s);
+	}.bind(this, __script))
+	.then(this.endAction.bind(this));
 };
 
 // API
@@ -434,37 +467,51 @@ Game.prototype.setPalette = function(__palette){
 };
 
 Game.prototype.goto = function(__passage) {
-	console.log('Going to passage:',__passage);
-	
-	// remove existing passage
-	var oldText = textContainer.removeChildren();
-	for(var i = 0; i < oldText.length; ++i){
-		oldText[i].destroy();
-	}
+	return new Promise(function(__resolve, __reject){
+		console.log('Going to passage:',__passage);
+		textContainer.targetAlpha = 0;
+		var i = setInterval(function(){
+			if(textContainer.alpha <= 0.2){
+				clearInterval(i);
+				__resolve();
+			}
+		}, -1);
+	})
+	.then(function(){
+		// remove existing passage
+		var oldText = textContainer.removeChildren();
+		for(var i = 0; i < oldText.length; ++i){
+			oldText[i].destroy();
+		}
+		textContainer.targetAlpha = 1;
 
-	// parse requested passage
-	if(this.currentPassage.title){
-		this.history.push(this.currentPassage.title);
-	}else{
-		console.log('History skipped because passage has no title:',this.currentPassage);
-	}
-	this.currentPassage = passageToText(parsePassage(passages[__passage]), size.x/2);
-	this.currentPassage.title = __passage;
+		// parse requested passage
+		if(this.currentPassage.title){
+			this.history.push(this.currentPassage.title);
+		}else{
+			console.warn('History skipped because passage has no title:',this.currentPassage);
+		}
+		this.currentPassage = passageToText(parsePassage(passages[__passage]), size.x/2);
+		this.currentPassage.title = __passage;
 
-	// add parsed passage
-	for(var i = 0; i < this.currentPassage.text.length; ++i){
-		textContainer.addChild(this.currentPassage.text[i]);
-	}
-	// re-center text
-	textContainer.y = size.y*3/4 - textContainer.height/2;
+		// add parsed passage
+		for(var i = 0; i < this.currentPassage.text.length; ++i){
+			textContainer.addChild(this.currentPassage.text[i]);
+		}
+		// re-center text
+		textContainer.y = size.y*3/4 - textContainer.height/2;
+		return;
+	}.bind(this));
 };
 
 Game.prototype.back = function() {
 	if(this.history.length > 0){
-		this.goto(this.history.pop()); // goto the last thing in history
-		this.history.pop(); // remove the last thing in history (i.e. don't get stuck in a loop)
+		return this.goto(this.history.pop()) // goto the last thing in history
+		.then(function(){
+			this.history.pop(); // remove the last thing in history (i.e. don't get stuck in a loop)
+		}.bind(this)); 
 	}else{
-		console.error("Back skipped because no history available.");
+		console.warn('Back skipped because no history available.');
 	}
 };
 
