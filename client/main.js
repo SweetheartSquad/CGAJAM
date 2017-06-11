@@ -403,7 +403,7 @@ Game.prototype.showVideo = function() {
 	video.textContainer.addChild(video.textContainer.bg);
 
 	// parse requested passage
-	video.currentPassage = passageToText(parsePassage(passages['API TEST']),size.x/3);
+	video.currentPassage = passageToText(parsePassage(passages['VIDEO TEST']),size.x/3);
 	//p.title = __passage;
 
 	// add parsed passage
