@@ -115,6 +115,11 @@ function init(){
 			}
 		}
 	}
+	video.currentPassage = {
+		text:[],
+		links:[],
+		title:null
+	};
 	video.texture = new PIXI.Texture(emptyTexture.baseTexture);
 	video.sprite = new PIXI.Sprite(video.texture);
 	video.sprite.filters = [greenScreen_filter];
