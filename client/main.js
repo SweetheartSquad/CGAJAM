@@ -146,8 +146,11 @@ function init(){
 		g.destroy();
 	}
 
+	video.textContainer = new PIXI.Container();
+
 	video.container.addChild(video.bg);
 	video.container.addChild(video.sprite);
+	video.container.addChild(video.textContainer);
 	video.container.addChild(video.border);
 
 	video.container.alpha = 0;
@@ -234,9 +237,10 @@ function update(){
 
 	// copy of current passage links
 	// (don't use them directly since they may change on click)
-	var links = []; 
-	for(var i = 0; i < api.currentPassage.links.length; ++i){
-		var link = api.currentPassage.links[i];
+	var links = [];
+	var activeLinks = (video.container.targetAlpha > 0 ? video : api).currentPassage.links;
+	for(var i = 0; i < activeLinks.length; ++i){
+		var link = activeLinks[i];
 		var p = link.toGlobal(PIXI.zero);
 
 		if(intersect(scaledMouse, {
@@ -342,7 +346,8 @@ function getInputs(){
 function Game(){
 	this.currentPassage = {
 		text:[],
-		links:[]
+		links:[],
+		title:null
 	};
 	this.history = [];
 }
@@ -372,6 +377,39 @@ Game.prototype.showVideo = function() {
 	if(video.video){
 		video.video.currentTime = 0;
 	}
+	
+	// remove existing passage
+	var oldText = video.textContainer.removeChildren();
+	for(var i = 0; i < oldText.length; ++i){
+		oldText[i].destroy();
+	}
+
+	// bg
+	{
+		var g = new PIXI.Graphics();
+		g.beginFill(0,1);
+		g.drawRect(0,0,1,1);
+		g.endFill();
+		video.textContainer.bg = new PIXI.Sprite(g.generateTexture());
+		g.destroy();
+	}
+	video.textContainer.bg.width = size.x/3;
+	video.textContainer.bg.height = 0;
+	video.textContainer.addChild(video.textContainer.bg);
+
+	// parse requested passage
+	video.currentPassage = passageToText(parsePassage(passages['API TEST']),size.x/3);
+	//p.title = __passage;
+
+	// add parsed passage
+	for(var i = 0; i < video.currentPassage.text.length; ++i){
+		video.textContainer.addChild(video.currentPassage.text[i]);
+	}
+	video.textContainer.x = size.x/3;
+	video.textContainer.y = size.y/8;
+	video.textContainer.bg.height = video.textContainer.height;
+	// re-center text
+	//textContainer.y = size.y*3/4 - textContainer.height/2;
 };
 
 Game.prototype.hideVideo = function() {
@@ -400,7 +438,11 @@ Game.prototype.goto = function(__passage) {
 	}
 
 	// parse requested passage
-	this.history.push(this.currentPassage.title);
+	if(this.currentPassage.title){
+		this.history.push(this.currentPassage.title);
+	}else{
+		console.log('History skipped because passage has no title:',this.currentPassage);
+	}
 	this.currentPassage = passageToText(parsePassage(passages[__passage]), size.x/2);
 	this.currentPassage.title = __passage;
 
@@ -413,8 +455,12 @@ Game.prototype.goto = function(__passage) {
 };
 
 Game.prototype.back = function() {
-	this.goto(this.history.pop()); // goto the last thing in history
-	this.history.pop(); // remove the last thing in history (i.e. don't get stuck in a loop)
+	if(this.history.length > 0){
+		this.goto(this.history.pop()); // goto the last thing in history
+		this.history.pop(); // remove the last thing in history (i.e. don't get stuck in a loop)
+	}else{
+		console.error("Back skipped because no history available.");
+	}
 };
 
 Game.onLinkClicked = function(){
