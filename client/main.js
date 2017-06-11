@@ -162,6 +162,8 @@ function init(){
 
 	textContainer = new PIXI.Container();
 	textContainer.x = size.x/4;
+	textContainer.alpha = 0;
+	textContainer.targetAlpha = 0;
 
 	game.addChild(bg);
 	game.addChild(textContainer);
@@ -198,7 +200,7 @@ function init(){
 	passages = parseSource(PIXI.loader.resources.source.data);
 	// create game and goto starting passage
 	api = new Game();
-	api.goto('START');
+	api.eval('this.goto("START");');
 
 	// start the main loop
 	main();
