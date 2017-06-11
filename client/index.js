@@ -17,12 +17,22 @@ var sounds=[];
 var scaleMode = 1;
 var scaleMultiplier = 1;
 
-$(document).ready(function(){
+ready(function(){
 
 	// try to auto-focus and make sure the game can be focused with a click if run from an iframe
 	window.focus();
-	$(document).on('mousedown',function(){
+	document.body.on('mousedown',function(){
 		window.focus();
+	});
+	document.body.on('mouseup',function(){
+		if (renderer.view.toggleFullscreen) {
+			if(getFullscreenElement()) {
+				exitFullscreen();
+			}else{
+				requestFullscreen(display);
+			}
+			renderer.view.toggleFullscreen = false;
+		}
 	});
 
 	window.requestAnimationFrame = 
@@ -31,9 +41,46 @@ $(document).ready(function(){
         window.oRequestAnimationFrame ||
         window.mozRequestAnimationFrame ||
         window.webkitRequestAnimationFrame;
+
+	document.exitFullscreen =
+		document.exitFullscreen ||
+		document.oExitFullScreen ||
+		document.msExitFullScreen ||
+		document.mozCancelFullScreen ||
+		document.webkitExitFullscreen;
+
+	getFullscreenElement = function(){
+		var f =
+			document.fullscreenElement ||
+			document.oFullscreenElement ||
+			document.msFullscreenElement ||
+			document.mozFullScreenElement ||
+			document.webkitFullscreenElement;
+		return f;
+	};
+	exitFullscreen = function(){
+		var f = 
+			document.exitFullscreen ||
+			document.oExitFullScreen ||
+			document.msExitFullScreen ||
+			document.mozCancelFullScreen ||
+			document.webkitExitFullscreen;
+		return f.call(document);
+	};
+	requestFullscreen = function(__el){
+		var f = 
+			__el.requestFullscreen ||
+			__el.oRequestFullscreen ||
+			__el.msRequestFullscreen ||
+			__el.mozRequestFullScreen ||
+			__el.webkitRequestFullscreen;
+		return f.call(__el);
+	};
+
 	// setup game
 	startTime=Date.now();
 
+	display = document.getElementById('display');
 
 	// create renderer
 	renderer = new PIXI.autoDetectRenderer(size.x, size.y, {
@@ -44,13 +91,21 @@ $(document).ready(function(){
 		clearBeforeRender:true,
 		autoResize:false,
 	});
+	renderer.view.id = 'canvas';
+
+    renderer.view.requestFullscreen = 
+    	renderer.view.requestFullscreen ||
+    	renderer.view.oRequestFullscreen ||
+    	renderer.view.msRequestFullscreen ||
+    	renderer.view.mozRequestFullScreen ||
+    	renderer.view.webkitRequestFullscreen;
 	
 	renderer.backgroundColor = 0x000000;
 
 	PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
 
 	// add the canvas to the html document
-	$('#display').prepend(renderer.view);
+	display.appendChild(renderer.view);
 
 
 	/*sounds['bgm']=new Howl({
@@ -126,8 +181,8 @@ function loadProgressHandler(__loader, __resource){
 
 
 function _resize(){
-	var w=$('#display').innerWidth();
-	var h=$('#display').innerHeight();
+	var w=display.offsetWidth;
+	var h=display.offsetHeight;
 	var ratio=size.x/size.y;
 
 	

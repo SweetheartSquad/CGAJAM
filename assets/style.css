@@ -21,7 +21,7 @@ html,body,#display{
 	right:0;
 	bottom:0;
 
-	background:#FFFFFF;
+	background:#000000;
 	color:#FFFFFF;
 
 	overflow:hidden;
@@ -38,9 +38,11 @@ html{
 
 canvas{
 	image-rendering: optimizeSpeed;
+    image-rendering: -o-crisp-edges;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: optimize-contrast;
+    image-rendering: crisp-edges;
     image-rendering: pixelated;
     -ms-interpolation-mode: nearest-neighbor;
 

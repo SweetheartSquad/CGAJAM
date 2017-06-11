@@ -20,13 +20,13 @@ var mouse={
 	},
 	mouseWheel: 0,
 
-	init: function(selector){
-		element = $(selector);
-		element.on("mouseup", mouse.on_up.bind(mouse));
-		element.on("mouseout", mouse.on_up.bind(mouse));
-		element.on("mousedown", mouse.on_down.bind(mouse));
-		element.on("mousemove", mouse.on_move.bind(mouse));
-		element.on("wheel", mouse.on_wheel.bind(mouse));
+	init: function(__elementId){
+		this.element = document.getElementById(__elementId);
+		this.element.on("mouseup", mouse.on_up.bind(mouse));
+		this.element.on("mouseout", mouse.on_up.bind(mouse));
+		this.element.on("mousedown", mouse.on_down.bind(mouse));
+		this.element.on("mousemove", mouse.on_move.bind(mouse));
+		this.element.on("wheel", mouse.on_wheel.bind(mouse));
 	},
 
 	update: function(){
@@ -57,8 +57,8 @@ var mouse={
 	},
 	on_move: function(event){
 		// get new position
-		this.pos.x = event.pageX - element.offset().left;
-		this.pos.y = event.pageY - element.offset().top;
+		this.pos.x = event.clientX - this.element.offsetLeft;
+		this.pos.y = event.clientY - this.element.offsetTop;
 		// calculate delta position
 		this.delta.x = this.pos.x - this.prev.x;
 		this.delta.y = this.pos.y - this.prev.y;
