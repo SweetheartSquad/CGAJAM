@@ -168,7 +168,11 @@ ready(function(){
 
 	PIXI.loader
 		.on('progress', loadProgressHandler)
-		.load(init);
+		.load(function(){
+			game.removeChild(game.loadingText);
+			game.loadingText.destroy();
+			init();
+		});
 });
 
 
@@ -186,6 +190,20 @@ function loadProgressHandler(__loader, __resource){
 	// called during loading
 	console.log('loading: ' + __resource.url);
 	console.log('progress: ' + __loader.progress+'%');
+
+	_resize();
+	if(!game.loadingText){
+		var f = clone(font);
+		f.align = 'center';
+		f.fill = '#'+rgbToHex(255,255,85).toString(16)
+		game.loadingText = new PIXI.Text('',f);
+		game.addChild(game.loadingText);
+	}
+	game.loadingText.text = 'Loading...\n'+Math.floor(__loader.progress)+'%';
+	game.loadingText.y = size.y/2 - game.loadingText.height/2;
+	game.loadingText.x = size.x/2 - game.loadingText.width/2;
+
+	renderer.render(game,null,true,false);
 }
 
 

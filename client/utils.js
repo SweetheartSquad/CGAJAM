@@ -19,6 +19,10 @@ function clamp(min,v,max){
 	return Math.max(min,Math.min(v,max));
 }
 
+function clone(__obj){
+	return JSON.parse(JSON.stringify(__obj));
+}
+
 
 
 function toggleMute(){
