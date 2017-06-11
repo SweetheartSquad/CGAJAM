@@ -18,6 +18,15 @@ linkNormal = rgbToHex(0.92*255,0.92*255,255);
 
 function init(){
 
+	{
+		var g = new PIXI.Graphics();
+		g.beginFill(0,0);
+		g.drawRect(0,0,1,1);
+		g.endFill();
+		emptyTexture = g.generateTexture();
+		g.destroy();
+	}
+
 	// initialize input managers
 	keys.init();
 	keys.capture = [keys.LEFT,keys.RIGHT,keys.UP,keys.DOWN,keys.SPACE,keys.ENTER,keys.BACKSPACE,keys.ESCAPE,keys.W,keys.A,keys.S,keys.D,keys.P,keys.M];
@@ -95,11 +104,19 @@ function init(){
 	video.bg.height = size.y;
 
 	// video sprite
-	PIXI.loader.resources.vid.data.loop = true;
-	PIXI.loader.resources.vid.data.volume = 0;
-	vidTex = PIXI.VideoBaseTexture.fromVideo(PIXI.loader.resources.vid.data);
-	vidTex2 = new PIXI.Texture(vidTex);
-	video.sprite = new PIXI.Sprite(vidTex2);
+	for(var i in PIXI.loader.resources){
+		if(PIXI.loader.resources.hasOwnProperty(i)){
+			var resource = PIXI.loader.resources[i];
+			if(resource.loadType === PIXI.loaders.Resource.LOAD_TYPE.VIDEO){
+				resource.data.loop = true;
+				resource.data.volume = 0;
+				resource.data.muted = true;
+				resource.data.autoplay = false;
+			}
+		}
+	}
+	video.texture = new PIXI.Texture(emptyTexture.baseTexture);
+	video.sprite = new PIXI.Sprite(video.texture);
 	video.sprite.filters = [greenScreen_filter];
 	video.sprite.width = size.x;
 	video.sprite.height = size.y;
@@ -340,11 +357,21 @@ Game.prototype.setBg = function(__bg) {
 };
 
 Game.prototype.setVideo = function(__video) {
-
+	this.hideVideo();
+	video.video = PIXI.loader.resources[__video].data;
+	if(video.baseTexture){
+		video.baseTexture.destroy();
+	}
+	video.baseTexture = PIXI.VideoBaseTexture.fromVideo(video.video);
+	video.texture.baseTexture = video.baseTexture;
+	this.showVideo();
 };
 
 Game.prototype.showVideo = function() {
 	video.container.targetAlpha = 1.0;
+	if(video.video){
+		video.video.currentTime = 0;
+	}
 };
 
 Game.prototype.hideVideo = function() {
