@@ -14,7 +14,10 @@ var scaleMultiplier = 1;
 
 ready(function(){
 	try{
+		var p = new Promise(function(__resolve, __reject){
 			game = new PIXI.Container();
+			__resolve();
+		});
 	}catch(e){
 		document.body.innerHTML='<p>Unsupported Browser. Sorry :(</p>';
 		throw 'Unsupported Browser: '+e;
