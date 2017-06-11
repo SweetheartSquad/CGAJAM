@@ -3,11 +3,6 @@ var lastTime = 0;
 var curTime = 0;
 
 var game;
-try{
-	game = new PIXI.Container();
-}catch(e){
-	document.body.innerHTML='<p>Unsupported Browser. Sorry :(</p>';
-}
 var resizeTimeout=null;
 
 var size={x:1280,y:720};
@@ -18,6 +13,12 @@ var scaleMode = 1;
 var scaleMultiplier = 1;
 
 ready(function(){
+	try{
+			game = new PIXI.Container();
+	}catch(e){
+		document.body.innerHTML='<p>Unsupported Browser. Sorry :(</p>';
+		throw 'Unsupported Browser: '+e;
+	}
 
 	// try to auto-focus and make sure the game can be focused with a click if run from an iframe
 	window.focus();
