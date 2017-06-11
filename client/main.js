@@ -551,7 +551,7 @@ function parsePassages(__source) {
 	// passages are in format:
 	// ::PASSAGE TITLE
 	// passage contents
-	var passageRegex = /:{2}(.*)\n/g;
+	var passageRegex = /\s*?:{2}(.*)\n/g;
 	var passages = {};
 
 	var p = __source.split(passageRegex);
