@@ -14,8 +14,9 @@ void main(void){
 
 
     // outline layer
-    float a = 0.0;
     const float outline = 0.005;
+    const vec3 outlineColour = vec3(1.0, 0.95, 0.95);
+    float a = 0.0;
     for(float x = -outline; x <= outline; x += outline){
     for(float y = -outline; y <= outline; y += outline){
 
@@ -23,17 +24,16 @@ void main(void){
         vec2 _uv = vTextureCoord.xy*uBufferSize/uSpriteSize;
         _uv = clamp(_uv + vec2(x,y), 0.0, 0.999999);
         _uv = _uv/uBufferSize*uSpriteSize;
-
-        a = max(a, greenScreen(texture2D(uSampler, _uv).rgb));
+        vec4 t = texture2D(uSampler,_uv);
+        a = max(a, greenScreen(t.rgb/t.a));
     }
     }
-    vec3 outlineColour = vec3(1.0, 0.95, 0.95);
 
     vec4 col = texture2D(uSampler, uv);
 
 
     // main layer
-    a = max(a, greenScreen(col.rgb));
+    a = max(a, greenScreen(col.rgb/col.a));
     col.rgb = mix(outlineColour, col.rgb, greenScreen(col.rgb));
     
     // output
