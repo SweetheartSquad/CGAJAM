@@ -25,6 +25,12 @@ $(document).ready(function(){
 		window.focus();
 	});
 
+	window.requestAnimationFrame = 
+		window.requestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame;
 	// setup game
 	startTime=Date.now();
 
