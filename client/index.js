@@ -107,6 +107,15 @@ ready(function(){
 	// add the canvas to the html document
 	display.appendChild(renderer.view);
 
+	font = {
+		fontFamily: "font",
+		fontSize: 24,
+		lineHeight: 30,
+		fill: "#FFFFFF",
+		align: "left",
+		textBaseline: "alphabetic"
+	};
+
 
 	/*sounds['bgm']=new Howl({
 		urls:['assets/audio/flatgame recording.ogg'],

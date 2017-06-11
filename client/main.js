@@ -560,14 +560,6 @@ function parsePassage(__source){
 // go through passage contents and convert to text objects
 // and interactive elements
 function passageToText(__passage, __maxWidth) {
-	var font = {
-		fontFamily: "font",
-		fontSize: 24,
-		lineHeight: 30,
-		fill: "#FFFFFF",
-		align: "left",
-		textBaseline: "alphabetic"
-	};
 	var temp = new PIXI.Text("",font);
 	var line = "";
 	var passage = {
