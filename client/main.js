@@ -373,7 +373,7 @@ Game.prototype.goto = function(__passage) {
 
 	// parse requested passage
 	this.history.push(this.currentPassage.title);
-	this.currentPassage = passageToText(parsePassage(passages[__passage]));
+	this.currentPassage = passageToText(parsePassage(passages[__passage]), size.x/2);
 	this.currentPassage.title = __passage;
 
 	// add parsed passage
@@ -480,7 +480,7 @@ function parsePassage(__source){
 
 // go through passage contents and convert to text objects
 // and interactive elements
-function passageToText(__passage) {
+function passageToText(__passage, __maxWidth) {
 	var font = {
 		fontFamily: "font",
 		fontSize: 24,
@@ -505,7 +505,7 @@ function passageToText(__passage) {
 			continue;
 		}
 
-		if(x + temp.measureWidth(line + wordText) > size.x/2 || wordText === '\n'){
+		if(x + temp.measureWidth(line + wordText) > __maxWidth || wordText === '\n'){
 			// wrap a line
 			temp.text = line;
 			passage.text.push(temp);
