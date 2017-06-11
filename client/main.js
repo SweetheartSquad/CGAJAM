@@ -96,6 +96,7 @@ function init(){
 
 	// video sprite
 	PIXI.loader.resources.vid.data.loop = true;
+	PIXI.loader.resources.vid.data.volume = 0;
 	vidTex = PIXI.VideoBaseTexture.fromVideo(PIXI.loader.resources.vid.data);
 	vidTex2 = new PIXI.Texture(vidTex);
 	video.sprite = new PIXI.Sprite(vidTex2);
