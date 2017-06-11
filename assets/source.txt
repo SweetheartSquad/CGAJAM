@@ -28,3 +28,6 @@ API TEST
 ::GOTO TEST
 GOTO TEST
 [[back|this.back()]]
+
+::VIDEO TEST
+Nice ship, it would be such a shame if something were to... happen to it.
