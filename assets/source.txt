@@ -28,6 +28,10 @@ GOTO TEST
 ::VIDEO TEST
 Nice ship, it would be such a shame if something were to... happen to it.
 
+::DEFAULT
+This page shows up when a passage failed to parse, or doesn't even exist. Try checking the link for spelling errors or the console logs for more detail on the error.
+[[back|this.back();]]
+
 ::INTRO
 Of course everything is going wrong on your vacation. You get away from the base for a five day getaway in the historic foothills of Charon and you're one day behind, two suitcases short, and three hundred thousand miles from the bed and breakfast you booked. You're only just now passing [[Venus]].
 

@@ -187,7 +187,7 @@ function init(){
 	passages = parseSource(PIXI.loader.resources.source.data);
 	// create game and goto starting passage
 	api = new Game();
-	
+
 	var p = screen_filter.uniforms["palette"];
 	game.alpha = 0;
 	screen_filter.uniforms["palette"] = screen_filter.uniforms["palette"] ? 0 : 1;
@@ -582,7 +582,12 @@ Game.prototype.setPalette = function(__palette){
 Game.prototype.goto = function(__passage) {
 	console.log('Going to passage:', __passage);
 	return fadeOut(textContainer)
-	.then(function(){
+	.then(parsePassage.bind(undefined, passages[__passage]))
+	.catch(function(__err){
+		console.error('Failed to parsePassage:',__passage,'\n',__err);
+		return parsePassage(passages['DEFAULT']);
+	})
+	.then(function(__newPassage){
 		// remove existing passage
 		var oldText = textContainer.removeChildren();
 		for(var i = 0; i < oldText.length; ++i){
@@ -595,7 +600,7 @@ Game.prototype.goto = function(__passage) {
 		}else{
 			console.warn('History skipped because passage has no title:',this.currentPassage);
 		}
-		this.currentPassage = passageToText(parsePassage(passages[__passage]), size.x/2);
+		this.currentPassage = passageToText(__newPassage, size.x/2);
 		this.currentPassage.title = __passage;
 
 		// add parsed passage
