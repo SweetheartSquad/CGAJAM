@@ -196,6 +196,16 @@ function init(){
 	}
 	game.addChild(video.container);
 
+	mouseSprite3 = new PIXI.Sprite(PIXI.loader.resources.cursor.texture);
+	game.addChild(mouseSprite3);
+	mouseSprite3.alpha = 0.4;
+	mouseSprite2 = new PIXI.Sprite(PIXI.loader.resources.cursor.texture);
+	game.addChild(mouseSprite2);
+	mouseSprite2.alpha = 0.45;
+	mouseSprite = new PIXI.Sprite(PIXI.loader.resources.cursor.texture);
+	game.addChild(mouseSprite);
+
+
 	// parse source
 	passages = parseSource(PIXI.loader.resources.source.data);
 	// create game and goto starting passage
@@ -299,6 +309,14 @@ function update(){
 	mouse.update();
 	scaledMouse.x = mouse.pos.x / scaleMultiplier;
 	scaledMouse.y = mouse.pos.y / scaleMultiplier;
+
+	mouseSprite.position.x = scaledMouse.x;
+	mouseSprite.position.y = scaledMouse.y;
+	mouseSprite.tint = mouseSprite2.tint = offWhite;
+	mouseSprite2.position.x = lerp(mouseSprite2.x, mouseSprite.x, 0.75);
+	mouseSprite2.position.y = lerp(mouseSprite2.y, mouseSprite.y, 0.75);
+	mouseSprite3.position.x = lerp(mouseSprite3.x, mouseSprite2.x, 0.5);
+	mouseSprite3.position.y = lerp(mouseSprite3.y, mouseSprite2.y, 0.5);
 }
 
 function render(){
