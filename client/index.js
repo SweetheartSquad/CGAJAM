@@ -168,6 +168,7 @@ ready(function(){
 		.add('ship','assets/ship.png')
 		.add('ship2','assets/ship2.png')
 		.add('ship3','assets/ship3.png')
+		.add('lab','assets/20170608_192715 (1).jpg')
 		.add('mansion','assets/mansion.png')
 		.add('vid','assets/Converge/ezgif.com-gif-to-mp4.mp4', {
 			loadType: PIXI.loaders.Resource.LOAD_TYPE.VIDEO

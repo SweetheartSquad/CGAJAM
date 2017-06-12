@@ -228,6 +228,9 @@ function update(){
 	if(keys.isDown(keys.C)){
 		api.setBg("mansion");
 	}
+	if(keys.isDown(keys.X)){
+		api.setBg("lab");
+	}
 	if(keys.isJustDown(keys.F)){
 		renderer.view.toggleFullscreen = true;
 	}
