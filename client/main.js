@@ -595,7 +595,30 @@ Game.onLinkClicked = function(){
 };
 
 
-
+function fadeOut(__obj){
+	return new Promise(function(__resolve, __reject){
+		__obj.targetAlpha = 0;
+		var i = setInterval(function(){
+			if(__obj.alpha <= 0.2){
+				clearInterval(i);
+				i = undefined;
+				__resolve();
+			}
+		}, -1);
+	});
+}
+function fadeIn(__obj){
+	return new Promise(function(__resolve, __reject){
+		__obj.targetAlpha = 1;
+		var i = setInterval(function(){
+			if(__obj.alpha >= 0.8){
+				clearInterval(i);
+				i = undefined;
+				__resolve();
+			}
+		}, -1);
+	});
+}
 
 
 
