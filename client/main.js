@@ -664,7 +664,7 @@ function parsePassage(__source){
 			// link
 			var link = __source[i].split('|');
 			words.push({
-				link: link[1],
+				link: link[1] || 'this.goto("'+link[0]+'");',
 				text: link[0]
 			});
 		}
