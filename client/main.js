@@ -525,39 +525,23 @@ Game.prototype.setPalette = function(__palette){
 		return Promise.resolve();
 	}
 
-	return new Promise(function(__resolve, __reject){
-		game.targetAlpha = 0;
-		var i = setInterval(function(){
-			if(game.alpha <= 0.2){
-				clearInterval(i);
-				__resolve();
-			}
-		}, -1);
-	})
+	return fadeOut(game)
 	.then(function() {
 		screen_filter.uniforms["palette"] = __palette;
 		game.targetAlpha = 1;
-	});
+	})
+	.then(fadeIn.bind(undefined, game));
 };
 
 Game.prototype.goto = function(__passage) {
-	return new Promise(function(__resolve, __reject){
-		console.log('Going to passage:',__passage);
-		textContainer.targetAlpha = 0;
-		var i = setInterval(function(){
-			if(textContainer.alpha <= 0.2){
-				clearInterval(i);
-				__resolve();
-			}
-		}, -1);
-	})
+	console.log('Going to passage:', __passage);
+	return fadeOut(textContainer)
 	.then(function(){
 		// remove existing passage
 		var oldText = textContainer.removeChildren();
 		for(var i = 0; i < oldText.length; ++i){
 			oldText[i].destroy();
 		}
-		textContainer.targetAlpha = 1;
 
 		// parse requested passage
 		if(this.currentPassage.title){
@@ -575,7 +559,8 @@ Game.prototype.goto = function(__passage) {
 		// re-center text
 		textContainer.y = size.y*3/4 - textContainer.height/2;
 		return;
-	}.bind(this));
+	}.bind(this))
+	.then(fadeIn.bind(undefined, textContainer));
 };
 
 Game.prototype.back = function() {
