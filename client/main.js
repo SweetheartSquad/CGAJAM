@@ -16,6 +16,11 @@ offWhite = rgbToHex(1.0*255, 0.95*255, 0.95*255);
 linkHover = rgbToHex(120,120,120);
 linkNormal = rgbToHex(0.92*255,0.92*255,255);
 
+border = {
+	outer: 16,
+	inner: 10
+};
+
 function init(){
 
 	{
@@ -130,20 +135,21 @@ function init(){
 	{
 		var g = new PIXI.Graphics();
 		g.beginFill(0,0);
-		g.lineStyle(40, 0, 1);
-		g.moveTo(0,0);
-		g.lineTo(0,mask.h);
-		g.lineTo(mask.w,mask.h);
-		g.lineTo(mask.w,0);
-		g.lineTo(0,0);
+		g.lineStyle(border.outer, 0, 1);
+		g.moveTo(border.outer/2,border.outer/2);
+		g.lineTo(border.outer/2,mask.h-border.outer/2);
+		g.lineTo(mask.w-border.outer/2,mask.h-border.outer/2);
+		g.lineTo(mask.w-border.outer/2,border.outer/2);
+		g.lineTo(border.outer/2,border.outer/2);
 		g.endFill();
 		g.beginFill(0,0);
-		g.lineStyle(20, offWhite, 1);
-		g.moveTo(0,0);
-		g.lineTo(0,mask.h);
-		g.lineTo(mask.w,mask.h);
-		g.lineTo(mask.w,0);
-		g.lineTo(0,0);
+		var b = border.outer - border.inner;
+		g.lineStyle(b, offWhite, 1);
+		g.moveTo(b/2,b/2);
+		g.lineTo(b/2,mask.h-b/2);
+		g.lineTo(mask.w-b/2,mask.h-b/2);
+		g.lineTo(mask.w-b/2,b/2);
+		g.lineTo(b/2,b/2);
 		g.endFill();
 		video.border = new PIXI.Sprite(g.generateTexture());
 		video.border.x = mask.x;
@@ -171,25 +177,25 @@ function init(){
 	{
 		var g = new PIXI.Graphics();
 		g.beginFill(0,0);
-		g.lineStyle(10, offWhite, 1);
+		g.lineStyle(border.outer-border.inner, offWhite, 1);
 		g.moveTo(0,size.y/2);
 		g.lineTo(size.x,size.y/2);
 		g.endFill();
 		g.beginFill(0,0);
-		g.lineStyle(40, offWhite, 1);
-		g.moveTo(0,0);
-		g.lineTo(0,size.y);
-		g.lineTo(size.x,size.y);
-		g.lineTo(size.x,0);
-		g.lineTo(0,0);
+		g.lineStyle(border.outer, offWhite, 1);
+		g.moveTo(border.outer/2,border.outer/2);
+		g.lineTo(border.outer/2,size.y-border.outer/2);
+		g.lineTo(size.x-border.outer/2,size.y-border.outer/2);
+		g.lineTo(size.x-border.outer/2,border.outer/2);
+		g.lineTo(border.outer/2,border.outer/2);
 		g.endFill();
 		g.beginFill(0,0);
-		g.lineStyle(20, 0, 1);
-		g.moveTo(0,0);
-		g.lineTo(0,size.y);
-		g.lineTo(size.x,size.y);
-		g.lineTo(size.x,0);
-		g.lineTo(0,0);
+		g.lineStyle(border.inner, 0, 1);
+		g.moveTo(border.inner/2,border.inner/2);
+		g.lineTo(border.inner/2,size.y-border.inner/2);
+		g.lineTo(size.x-border.inner/2,size.y-border.inner/2);
+		g.lineTo(size.x-border.inner/2,border.inner/2);
+		g.lineTo(border.inner/2,border.inner/2);
 		g.endFill();
 		game.addChild(new PIXI.Sprite(g.generateTexture()));
 		g.destroy();
