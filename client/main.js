@@ -537,11 +537,17 @@ Game.prototype.showVideo = function() {
 	video.passageContainer.x = Math.floor(size.x/2 - video.passageContainer.width/2);
 	video.passageContainer.y = Math.floor(size.y/4 - video.passageContainer.height/2);
 
-	return fadeIn(video.container);
+	return Promise.resolve()
+	.then(function(){
+		return Promise.all([fadeIn(video.container), fadeOut(textContainer)]);
+	});
 };
 
 Game.prototype.hideVideo = function() {
-	return fadeOut(video.container);
+	return Promise.resolve()
+	.then(function(){
+		return Promise.all([fadeOut(video.container), fadeIn(textContainer)]);
+	});
 };
 
 Game.prototype.enableShader = function(){
