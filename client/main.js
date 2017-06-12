@@ -13,7 +13,7 @@ function main(){
 }
 
 offWhite = rgbToHex(1.0*255, 0.95*255, 0.95*255);
-linkHover = rgbToHex(110,110,110);
+linkHover = rgbToHex(120,120,120);
 linkNormal = rgbToHex(0.92*255,0.92*255,255);
 
 function init(){
@@ -269,12 +269,28 @@ function update(){
 		links[i]();
 	}
 
-	if(!isNaN(video.container.targetAlpha)) {
-		video.container.alpha = lerp(video.container.alpha, video.container.targetAlpha,0.05);
-	}
-
-	if(!isNaN(textContainer.targetAlpha)) {
-		textContainer.alpha = lerp(textContainer.alpha, textContainer.targetAlpha,0.05);
+	var alphaAnimation = [
+		{
+			obj:video.container,
+			speed:0.01
+		},
+		{
+			obj:textContainer,
+			speed:0.05
+		},
+		{
+			obj:game,
+			speed:0.05
+		}
+	];
+	for(var i = 0; i < alphaAnimation.length; ++i){
+		var animation = alphaAnimation[i];
+		if(!isNaN(animation.obj.targetAlpha)) {
+			animation.obj.alpha += Math.sign(animation.obj.targetAlpha - animation.obj.alpha)*animation.speed;//lerp(obj.alpha, obj.targetAlpha,0.05);
+			if(animation.obj.alpha === animation.obj.targetAlpha){
+				animation.obj.targetAlpha = undefined;
+			}
+		}
 	}
 
 	// update input managers
@@ -465,7 +481,26 @@ Game.prototype.disableShader = function(){
 };
 
 Game.prototype.setPalette = function(__palette){
-	screen_filter.uniforms["palette"] = __palette;
+	console.log('Setting palette:',__palette);
+
+	if(__palette === screen_filter.uniforms["palette"]) {
+		console.log('Palette already set');
+		return Promise.resolve();
+	}
+
+	return new Promise(function(__resolve, __reject){
+		game.targetAlpha = 0;
+		var i = setInterval(function(){
+			if(game.alpha <= 0.2){
+				clearInterval(i);
+				__resolve();
+			}
+		}, -1);
+	})
+	.then(function() {
+		screen_filter.uniforms["palette"] = __palette;
+		game.targetAlpha = 1;
+	});
 };
 
 Game.prototype.goto = function(__passage) {
