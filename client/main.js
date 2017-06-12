@@ -133,35 +133,20 @@ function init(){
 
 	// video border
 	{
-		var g = new PIXI.Graphics();
-		g.beginFill(0,0);
-		g.lineStyle(border.outer, 0, 1);
-		g.moveTo(border.outer/2,border.outer/2);
-		g.lineTo(border.outer/2,mask.h-border.outer/2);
-		g.lineTo(mask.w-border.outer/2,mask.h-border.outer/2);
-		g.lineTo(mask.w-border.outer/2,border.outer/2);
-		g.lineTo(border.outer/2,border.outer/2);
-		g.endFill();
-		g.beginFill(0,0);
-		var b = border.outer - border.inner;
-		g.lineStyle(b, offWhite, 1);
-		g.moveTo(b/2,b/2);
-		g.lineTo(b/2,mask.h-b/2);
-		g.lineTo(mask.w-b/2,mask.h-b/2);
-		g.lineTo(mask.w-b/2,b/2);
-		g.lineTo(b/2,b/2);
-		g.endFill();
-		video.border = new PIXI.Sprite(g.generateTexture());
+		video.border = new PIXI.Sprite(getBorderTex({width: mask.w, height: mask.h}, false));
 		video.border.x = mask.x;
 		video.border.y = mask.y;
-		g.destroy();
 	}
 
-	video.textContainer = new PIXI.Container();
+	video.passageContainer = new PIXI.Container();
+	video.passageContainer.textContainer = new PIXI.Container();
+	video.passageContainer.addChild(video.passageContainer.textContainer);
+	video.passageContainer.textContainer.x += border.outer;
+	video.passageContainer.textContainer.y += border.outer;
 
 	video.container.addChild(video.bg);
 	video.container.addChild(video.sprite);
-	video.container.addChild(video.textContainer);
+	video.container.addChild(video.passageContainer);
 	video.container.addChild(video.border);
 
 	video.container.alpha = 0;
@@ -181,24 +166,10 @@ function init(){
 		g.moveTo(0,size.y/2);
 		g.lineTo(size.x,size.y/2);
 		g.endFill();
-		g.beginFill(0,0);
-		g.lineStyle(border.outer, offWhite, 1);
-		g.moveTo(border.outer/2,border.outer/2);
-		g.lineTo(border.outer/2,size.y-border.outer/2);
-		g.lineTo(size.x-border.outer/2,size.y-border.outer/2);
-		g.lineTo(size.x-border.outer/2,border.outer/2);
-		g.lineTo(border.outer/2,border.outer/2);
-		g.endFill();
-		g.beginFill(0,0);
-		g.lineStyle(border.inner, 0, 1);
-		g.moveTo(border.inner/2,border.inner/2);
-		g.lineTo(border.inner/2,size.y-border.inner/2);
-		g.lineTo(size.x-border.inner/2,size.y-border.inner/2);
-		g.lineTo(size.x-border.inner/2,border.inner/2);
-		g.lineTo(border.inner/2,border.inner/2);
-		g.endFill();
 		game.addChild(new PIXI.Sprite(g.generateTexture()));
 		g.destroy();
+
+		game.addChild(new PIXI.Sprite(getBorderTex({width: size.x, height: size.y}, true)));
 	}
 	game.addChild(video.container);
 
@@ -392,6 +363,31 @@ function getInputs(){
 	return res;
 }
 
+function getBorderTex(__rect, __invert){
+	var g = new PIXI.Graphics();
+	g.beginFill(0,0);
+	g.lineStyle(border.outer, __invert ? offWhite : 0, 1);
+	g.moveTo(border.outer/2,border.outer/2);
+	g.lineTo(border.outer/2,__rect.height-border.outer/2);
+	g.lineTo(__rect.width-border.outer/2,__rect.height-border.outer/2);
+	g.lineTo(__rect.width-border.outer/2,border.outer/2);
+	g.lineTo(border.outer/2,border.outer/2);
+	g.endFill();
+	g.beginFill(0,0);
+
+	var b = __invert ? border.inner : (border.outer - border.inner);
+	g.lineStyle(b, __invert ? 0 : offWhite, 1);
+	g.moveTo(b/2,b/2);
+	g.lineTo(b/2,__rect.height-b/2);
+	g.lineTo(__rect.width-b/2,__rect.height-b/2);
+	g.lineTo(__rect.width-b/2,b/2);
+	g.lineTo(b/2,b/2);
+	g.endFill();
+	var tex = g.generateTexture();
+	g.destroy();
+	return tex;
+}
+
 
 
 function Game(){
@@ -453,43 +449,60 @@ Game.prototype.setVideo = function(__video) {
 };
 
 Game.prototype.showVideo = function() {
+	var textWidth = size.x/3;
+
 	video.container.targetAlpha = 1.0;
 	if(video.video){
 		video.video.currentTime = 0;
 	}
 	
 	// remove existing passage
-	var oldText = video.textContainer.removeChildren();
+	var oldText = video.passageContainer.textContainer.removeChildren();
 	for(var i = 0; i < oldText.length; ++i){
 		oldText[i].destroy();
 	}
 
 	// bg
+	if(video.passageContainer.bg){
+		video.passageContainer.removeChild(video.passageContainer.bg);
+		video.passageContainer.bg.destroy();
+	}
 	{
 		var g = new PIXI.Graphics();
 		g.beginFill(0,1);
 		g.drawRect(0,0,1,1);
 		g.endFill();
-		video.textContainer.bg = new PIXI.Sprite(g.generateTexture());
+		video.passageContainer.bg = new PIXI.Sprite(g.generateTexture());
 		g.destroy();
 	}
-	video.textContainer.bg.width = size.x/3;
-	video.textContainer.bg.height = 0;
-	video.textContainer.addChild(video.textContainer.bg);
+	video.passageContainer.bg.height = 0;
 
 	// parse requested passage
-	video.currentPassage = passageToText(parsePassage(passages['VIDEO TEST']),size.x/3);
+	video.currentPassage = passageToText(parsePassage(passages['VIDEO TEST']),textWidth);
 	//p.title = __passage;
 
 	// add parsed passage
 	for(var i = 0; i < video.currentPassage.text.length; ++i){
-		video.textContainer.addChild(video.currentPassage.text[i]);
+		video.passageContainer.textContainer.addChild(video.currentPassage.text[i]);
 	}
-	video.textContainer.x = size.x/3;
-	video.textContainer.y = size.y/8;
-	video.textContainer.bg.height = video.textContainer.height;
+	video.passageContainer.bg.height = video.passageContainer.textContainer.height + border.outer*2;
+	video.passageContainer.bg.width = textWidth + border.outer*2;
+	video.passageContainer.addChildAt(video.passageContainer.bg, 0);
+	// border
+	{
+		if(video.passageContainer.border){
+			video.passageContainer.removeChild(video.passageContainer.border);
+			video.passageContainer.border.destroy();
+		}
+		video.passageContainer.border = new PIXI.Sprite(getBorderTex(video.passageContainer.bg,false))
+		video.passageContainer.addChild(video.passageContainer.border);
+	}
+	//video.passageContainer.bg.width +=  border.outer*2;
+	//video.passageContainer.bg.height +=  border.outer*2;
 	// re-center text
 	//textContainer.y = size.y*3/4 - textContainer.height/2;
+	video.passageContainer.x = size.x/2 - video.passageContainer.width/2;
+	video.passageContainer.y = size.y/4 - video.passageContainer.height/2;
 };
 
 Game.prototype.hideVideo = function() {
