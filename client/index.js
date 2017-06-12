@@ -12,6 +12,45 @@ var sounds=[];
 var scaleMode = 1;
 var scaleMultiplier = 1;
 
+
+getFullscreenElement = function(){
+	var f =
+		document.fullscreenElement ||
+		document.oFullscreenElement ||
+		document.msFullscreenElement ||
+		document.mozFullScreenElement ||
+		document.webkitFullscreenElement;
+	return f;
+};
+exitFullscreen = function(){
+	var f = 
+		document.exitFullscreen ||
+		document.oExitFullScreen ||
+		document.msExitFullScreen ||
+		document.mozCancelFullScreen ||
+		document.webkitExitFullscreen;
+	return f.call(document);
+};
+requestFullscreen = function(__el){
+	var f = 
+		__el.requestFullscreen ||
+		__el.oRequestFullscreen ||
+		__el.msRequestFullscreen ||
+		__el.mozRequestFullScreen ||
+		__el.webkitRequestFullscreen;
+	return f.call(__el);
+};
+toggleFullscreen = function(){
+	if (renderer.view.toggleFullscreen) {
+		if(getFullscreenElement()) {
+			exitFullscreen();
+		}else{
+			requestFullscreen(display);
+		}
+		renderer.view.toggleFullscreen = false;
+	}
+};
+
 ready(function(){
 	try{
 		var p = new Promise(function(__resolve, __reject){
@@ -28,16 +67,8 @@ ready(function(){
 	document.body.on('mousedown',function(){
 		window.focus();
 	});
-	document.body.on('mouseup',function(){
-		if (renderer.view.toggleFullscreen) {
-			if(getFullscreenElement()) {
-				exitFullscreen();
-			}else{
-				requestFullscreen(display);
-			}
-			renderer.view.toggleFullscreen = false;
-		}
-	});
+	document.body.on('mouseup',toggleFullscreen);
+	document.body.on('keyup',toggleFullscreen);
 
 	window.requestAnimationFrame = 
 		window.requestAnimationFrame ||
@@ -53,33 +84,6 @@ ready(function(){
 		document.mozCancelFullScreen ||
 		document.webkitExitFullscreen;
 
-	getFullscreenElement = function(){
-		var f =
-			document.fullscreenElement ||
-			document.oFullscreenElement ||
-			document.msFullscreenElement ||
-			document.mozFullScreenElement ||
-			document.webkitFullscreenElement;
-		return f;
-	};
-	exitFullscreen = function(){
-		var f = 
-			document.exitFullscreen ||
-			document.oExitFullScreen ||
-			document.msExitFullScreen ||
-			document.mozCancelFullScreen ||
-			document.webkitExitFullscreen;
-		return f.call(document);
-	};
-	requestFullscreen = function(__el){
-		var f = 
-			__el.requestFullscreen ||
-			__el.oRequestFullscreen ||
-			__el.msRequestFullscreen ||
-			__el.mozRequestFullScreen ||
-			__el.webkitRequestFullscreen;
-		return f.call(__el);
-	};
 
 	// setup game
 	startTime=Date.now();

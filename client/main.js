@@ -228,6 +228,9 @@ function update(){
 	if(keys.isDown(keys.C)){
 		api.setBg("mansion");
 	}
+	if(keys.isJustDown(keys.F)){
+		renderer.view.toggleFullscreen = true;
+	}
 
 	// copy of current passage links
 	// (don't use them directly since they may change on click)
