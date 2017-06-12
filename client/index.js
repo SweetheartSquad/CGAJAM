@@ -158,6 +158,7 @@ ready(function(){
 	CustomFilter.prototype.constructor = CustomFilter;
 	PIXI.loader
 		.add('source','assets/source.txt')
+		.add('cursor','assets/cursor.png')
 		.add('vert','assets/passthrough.vert')
 		.add('bg','assets/1453-render_1040.png')
 		.add('ship','assets/ship.png')
