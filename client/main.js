@@ -206,30 +206,30 @@ function update(){
 
 	var inputs = getInputs();
 
-	if(keys.isDown(keys.A)){
-		api.showVideo();
+	if(keys.isJustDown(keys.A)){
+		api.eval('api.showVideo();');
 	}
-	if(keys.isDown(keys.S)){
-		api.hideVideo();
+	if(keys.isJustDown(keys.S)){
+		api.eval('api.hideVideo();');
 	}
 
-	if(keys.isDown(keys.B)){
-		api.setBg("ship");
+	if(keys.isJustDown(keys.B)){
+		api.eval('api.setBg("ship");');
 	}
-	if(keys.isDown(keys.M)){
-		api.setBg("ship2");
+	if(keys.isJustDown(keys.M)){
+		api.eval('api.setBg("ship2");');
 	}
-	if(keys.isDown(keys.V)){
-		api.setBg("ship3");
+	if(keys.isJustDown(keys.V)){
+		api.eval('api.setBg("ship3");');
 	}
-	if(keys.isDown(keys.N)){
-		api.setBg("bg");
+	if(keys.isJustDown(keys.N)){
+		api.eval('api.setBg("bg");');
 	}
-	if(keys.isDown(keys.C)){
-		api.setBg("mansion");
+	if(keys.isJustDown(keys.C)){
+		api.eval('api.setBg("mansion");');
 	}
-	if(keys.isDown(keys.X)){
-		api.setBg("lab");
+	if(keys.isJustDown(keys.X)){
+		api.eval('api.setBg("lab");');
 	}
 	if(keys.isJustDown(keys.F)){
 		renderer.view.toggleFullscreen = true;
