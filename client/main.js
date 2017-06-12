@@ -237,7 +237,7 @@ function update(){
 		var link = activeLinks[i];
 		var p = link.toGlobal(PIXI.zero);
 
-		if(intersect(scaledMouse, {
+		if(!api.busy && intersect(scaledMouse, {
 			x:p.x,
 			y:p.y,
 			width:link.width,
