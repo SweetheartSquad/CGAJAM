@@ -280,7 +280,8 @@ function update(){
 		var animation = alphaAnimation[i];
 		if(!isNaN(animation.obj.targetAlpha)) {
 			animation.obj.alpha += Math.sign(animation.obj.targetAlpha - animation.obj.alpha)*animation.speed;//lerp(obj.alpha, obj.targetAlpha,0.05);
-			if(animation.obj.alpha === animation.obj.targetAlpha){
+			if(Math.abs(animation.obj.alpha - animation.obj.targetAlpha) <= animation.speed){
+				animation.obj.alpha = animation.obj.targetAlpha;
 				animation.obj.targetAlpha = undefined;
 			}
 		}
