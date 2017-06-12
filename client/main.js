@@ -187,7 +187,12 @@ function init(){
 	passages = parseSource(PIXI.loader.resources.source.data);
 	// create game and goto starting passage
 	api = new Game();
-	api.eval('this.goto("START");');
+	
+	var p = screen_filter.uniforms["palette"];
+	game.alpha = 0;
+	screen_filter.uniforms["palette"] = screen_filter.uniforms["palette"] ? 0 : 1;
+	api.eval('this.setPalette('+p+');')
+	.then(api.eval.bind(api,'this.goto("START");'));
 
 	// start the main loop
 	main();
