@@ -268,6 +268,14 @@ function update(){
 			speed:0.01
 		},
 		{
+			obj:video.bg,
+			speed:0.05
+		},
+		{
+			obj:bg,
+			speed:0.05
+		},
+		{
 			obj:textContainer,
 			speed:0.05
 		},
@@ -432,7 +440,7 @@ Game.prototype.endAction = function() {
 };
 
 Game.prototype.eval = function(__script) {
-	this.startAction()
+	return this.startAction()
 	.then(function(__s){
 		return eval(__s);
 	}.bind(this, __script))
@@ -441,24 +449,42 @@ Game.prototype.eval = function(__script) {
 
 // API
 Game.prototype.setBg = function(__bg) {
-	bg.texture = video.bg.texture = PIXI.loader.resources[__bg].texture;
+	console.log('Setting background to:',__bg);
+	return Promise.all([
+		// fade out
+		fadeOut(bg),
+		fadeOut(video.bg)
+	])
+	.then(function(r){
+		// swap bg
+		bg.texture = video.bg.texture = PIXI.loader.resources[__bg].texture;
+	})
+	.then(function(){
+		// fade in
+		return Promise.all([
+			fadeIn(bg),
+			fadeIn(video.bg)
+		]);
+	});
 };
 
 Game.prototype.setVideo = function(__video) {
-	this.hideVideo();
-	video.video = PIXI.loader.resources[__video].data;
-	if(video.baseTexture){
-		video.baseTexture.destroy();
-	}
-	video.baseTexture = PIXI.VideoBaseTexture.fromVideo(video.video);
-	video.texture.baseTexture = video.baseTexture;
-	this.showVideo();
+	return this.hideVideo()
+	.then(function(){
+		// swap video
+		video.video = PIXI.loader.resources[__video].data;
+		if(video.baseTexture){
+			video.baseTexture.destroy();
+		}
+		video.baseTexture = PIXI.VideoBaseTexture.fromVideo(video.video);
+		video.texture.baseTexture = video.baseTexture;
+	})
+	.then(this.showVideo.bind(this));
 };
 
 Game.prototype.showVideo = function() {
 	var textWidth = size.x/3;
 
-	video.container.targetAlpha = 1.0;
 	if(video.video){
 		video.video.currentTime = 0;
 	}
@@ -510,10 +536,12 @@ Game.prototype.showVideo = function() {
 	//textContainer.y = size.y*3/4 - textContainer.height/2;
 	video.passageContainer.x = Math.floor(size.x/2 - video.passageContainer.width/2);
 	video.passageContainer.y = Math.floor(size.y/4 - video.passageContainer.height/2);
+
+	return fadeIn(video.container);
 };
 
 Game.prototype.hideVideo = function() {
-	video.container.targetAlpha = 0.0;
+	return fadeOut(video.container);
 };
 
 Game.prototype.enableShader = function(){
@@ -588,25 +616,27 @@ Game.onLinkClicked = function(){
 
 
 function fadeOut(__obj){
+	console.log('fadeOut: ',__obj);
 	return new Promise(function(__resolve, __reject){
 		__obj.targetAlpha = 0;
 		var i = setInterval(function(){
 			if(__obj.alpha <= 0.2){
 				clearInterval(i);
 				i = undefined;
-				__resolve();
+				__resolve(__obj);
 			}
 		}, -1);
 	});
 }
 function fadeIn(__obj){
+	console.log('fadeIn: ',__obj);
 	return new Promise(function(__resolve, __reject){
 		__obj.targetAlpha = 1;
 		var i = setInterval(function(){
 			if(__obj.alpha >= 0.8){
 				clearInterval(i);
 				i = undefined;
-				__resolve();
+				__resolve(__obj);
 			}
 		}, -1);
 	});
