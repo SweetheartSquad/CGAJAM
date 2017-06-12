@@ -3,6 +3,7 @@ hey here's some garbo that shouldn't get parsed
 ::START
 This is the start menu
 
+[[start|this.goto('INTRO');]]
 [[options|this.goto('OPTIONS');]]
 [[api test|this.goto('API TEST');]]
 
@@ -11,11 +12,6 @@ Palette: [[CGA0|this.enableShader();this.setPalette(0);]] [[CGA1|this.enableShad
 Scaling: [[1:1|scaleMode=2;_resize();]] [[scale-to-fit|scaleMode=1;_resize();]] [[scale-in-multiples|scaleMode=0;_resize();]]
 Fullscreen: [[toggle|renderer.view.toggleFullscreen = true;]]
 [[back|this.back()]]
-
-::PARAGRAPH TEST
-This is a paragraph test.
-
-Of course everything is going wrong on [[your vacation|this.setBg("ship2");]]. You get away from the base for a five day getaway in the historic foothills of Charon and you're one day [[behind| ]], two suitcases short, and three hundred thousand [[miles| ]] from the bed and breakfast you booked. [[You're| ]] only just now passing Venus.
 
 ::API TEST
 API TEST
@@ -31,3 +27,53 @@ GOTO TEST
 
 ::VIDEO TEST
 Nice ship, it would be such a shame if something were to... happen to it.
+
+::INTRO
+Of course everything is going wrong on your vacation. You get away from the base for a five day getaway in the historic foothills of Charon and you're one day behind, two suitcases short, and three hundred thousand miles from the bed and breakfast you booked. You're only just now passing [[Venus]].
+
+
+::Venus
+In the late 3080s, Venus was purchased by Cairo McVeigh, the late-in-life quintillionaire and founder of Excelsior Machines, the largest anti-gravity solutions company on Earth. McVeigh spent quadrillions to acquire the planet from its previous owner, [[Odious Sneed]], who spent his trillions on terraforming the planet to build a lavish summer home.
+
+
+::Odious Sneed
+Sneed's company, KROM, was a direct competitor of Excelsior. When a series of questionable emails from Sneed's private servers were leaked, KROM's stock prices plummeted. To pour salt in the wound, McVeigh acquired Venus and had Sneed's [[mansion and grounds]] destroyed.
+
+
+::mansion and grounds
+Since then, you've always been curious about the place. What beautiful vistas would a quintillionaire's private planet hold? What exquisite architectures? What [[grave secrets]]?
+
+
+::grave secrets
+The steering wheel jerks in your hands. You look down at your dashboard and see a series of flickering lights. You're not a ship expert, but [[something is wrong]].
+
+
+::something is wrong
+You feel the shudder of your engine turn into a sort of wheezing before it shuts off entirely. You try to engage the backup boosters but the display is frozen. You make your necessary preparations as your faithful old B-Line 500 plummets toward [[Venus|this.goto('The crash')]].
+
+
+::The crash
+Your ship crashes into the planet. Thanks to the forcefields -- and your airbags -- you and your ship survive. When you reboot the system, it appears that despite some scary-looking surface damage, you only need a few repairs before you can get this hunk of bolts back in the air.
+
+Of course, you're not sure you can call a mechanic [[around these parts]].
+
+
+::around these parts
+To the east, on top of an enormous mountain, you see a [[hideously large estate]]. Your [[ship]], looking a bit beat up, sits nearby.
+
+
+::ship
+Your ship has seen better days, but you're confident it'll pull through. Your B-Line 500 was top of the line back in 3085, and despite a few hiccups, it still runs like the day you bought it. You just about blew out your savings for it, so you're glad it hasn't let you down.
+
+To repair your ship, you need to find a toolbox, an engine band, and a range emitter.
+
+[[back|this.goto('around these parts')]]
+
+
+::hideously large estate
+The estate is unbelievable. It looks more like a small town. This must belong to Cairo McVeigh. Rumour has it that he never leaves his estate, so you're sure you can catch him. Whether he'll help a poor schmuck like you might be another issue. 
+
+[[Go to the estate]]
+[[Go back to your ship|this.goto('around these parts')]]
+
+
