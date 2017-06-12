@@ -243,28 +243,31 @@ function update(){
 	// copy of current passage links
 	// (don't use them directly since they may change on click)
 	var links = [];
-	var activeLinks = (video.container.targetAlpha > 0 ? video : api).currentPassage.links;
-	for(var i = 0; i < activeLinks.length; ++i){
-		var link = activeLinks[i];
-		var p = link.toGlobal(PIXI.zero);
+	var activePassage = (api.video > 0 ? video : api).currentPassage;
+	if(activePassage){
+		var activeLinks = activePassage.links;
+		for(var i = 0; i < activeLinks.length; ++i){
+			var link = activeLinks[i];
+			var p = link.toGlobal(PIXI.zero);
 
-		if(!api.busy && intersect(scaledMouse, {
-			x:p.x,
-			y:p.y,
-			width:link.width,
-			height:link.height
-		})){
-			link.tint = linkHover;
+			if(!api.busy && intersect(scaledMouse, {
+				x:p.x,
+				y:p.y,
+				width:link.width,
+				height:link.height
+			})){
+				link.tint = linkHover;
 
-			if(mouse.isJustDown()){
-				links.push(link.onclick.bind(link));
+				if(mouse.isJustDown()){
+					links.push(link.onclick.bind(link));
+				}
+			} else {
+				link.tint = linkNormal;
 			}
-		} else {
-			link.tint = linkNormal;
 		}
-	}
-	for(var i = 0; i < links.length; ++i){
-		links[i]();
+		for(var i = 0; i < links.length; ++i){
+			links[i]();
+		}
 	}
 
 	var alphaAnimation = [
@@ -282,6 +285,10 @@ function update(){
 		},
 		{
 			obj:textContainer,
+			speed:0.05
+		},
+		{
+			obj:video.passageContainer.textContainer,
 			speed:0.05
 		},
 		{
@@ -416,6 +423,7 @@ function Game(){
 		links:[],
 		title:null
 	};
+	this.video = false;
 	this.history = [];
 	this.busy = false;
 }
@@ -490,71 +498,27 @@ Game.prototype.setVideo = function(__video) {
 };
 
 Game.prototype.showVideo = function() {
-	var textWidth = size.x/3;
-
 	if(video.video){
 		video.video.currentTime = 0;
 	}
 	
-	// remove existing passage
-	var oldText = video.passageContainer.textContainer.removeChildren();
-	for(var i = 0; i < oldText.length; ++i){
-		oldText[i].destroy();
-	}
-
-	// bg
-	if(video.passageContainer.bg){
-		video.passageContainer.removeChild(video.passageContainer.bg);
-		video.passageContainer.bg.destroy();
-	}
-	{
-		var g = new PIXI.Graphics();
-		g.beginFill(0,1);
-		g.drawRect(0,0,1,1);
-		g.endFill();
-		video.passageContainer.bg = new PIXI.Sprite(g.generateTexture());
-		g.destroy();
-	}
-	video.passageContainer.bg.height = 0;
-
-	// parse requested passage
-	video.currentPassage = passageToText(parsePassage(passages['VIDEO TEST']),textWidth);
-	//p.title = __passage;
-
-	// add parsed passage
-	for(var i = 0; i < video.currentPassage.text.length; ++i){
-		video.passageContainer.textContainer.addChild(video.currentPassage.text[i]);
-	}
-	video.passageContainer.bg.height = video.passageContainer.textContainer.height + border.outer*2;
-	video.passageContainer.bg.width = textWidth + border.outer*2;
-	video.passageContainer.addChildAt(video.passageContainer.bg, 0);
-	// border
-	{
-		if(video.passageContainer.border){
-			video.passageContainer.removeChild(video.passageContainer.border);
-			video.passageContainer.border.destroy();
-		}
-		video.passageContainer.border = new PIXI.Sprite(getBorderTex(video.passageContainer.bg,false))
-		video.passageContainer.addChild(video.passageContainer.border);
-	}
-	//video.passageContainer.bg.width +=  border.outer*2;
-	//video.passageContainer.bg.height +=  border.outer*2;
-	// re-center text
-	//textContainer.y = size.y*3/4 - textContainer.height/2;
-	video.passageContainer.x = Math.floor(size.x/2 - video.passageContainer.width/2);
-	video.passageContainer.y = Math.floor(size.y/4 - video.passageContainer.height/2);
-
 	return Promise.resolve()
 	.then(function(){
 		return Promise.all([fadeIn(video.container), fadeOut(textContainer)]);
-	});
+	})
+	.then(function(){
+		this.video = true;
+	}.bind(this));
 };
 
 Game.prototype.hideVideo = function() {
 	return Promise.resolve()
 	.then(function(){
 		return Promise.all([fadeOut(video.container), fadeIn(textContainer)]);
-	});
+	})
+	.then(function(){
+		this.video = false;
+	}.bind(this));
 };
 
 Game.prototype.enableShader = function(){
@@ -581,29 +545,31 @@ Game.prototype.setPalette = function(__palette){
 	.then(fadeIn.bind(undefined, game));
 };
 
-Game.prototype.goto = function(__passage) {
-	console.log('Going to passage:', __passage);
-	return fadeOut(textContainer)
-	.then(parsePassage.bind(undefined, passages[__passage]))
-	.catch(function(__err){
-		console.error('Failed to parsePassage:',__passage,'\n',__err);
-		return parsePassage(passages['DEFAULT']);
-	})
-	.then(function(__newPassage){
-		// remove existing passage
-		var oldText = textContainer.removeChildren();
-		for(var i = 0; i < oldText.length; ++i){
-			oldText[i].destroy();
-		}
+Game.prototype.displayPassage = function(__newPassage){
+	// remove existing passage
+	var oldText = textContainer.removeChildren();
+	for(var i = 0; i < oldText.length; ++i){
+		oldText[i].destroy();
+	}
+	oldText = video.passageContainer.textContainer.removeChildren();
+	for(var i = 0; i < oldText.length; ++i){
+		oldText[i].destroy();
+	}
 
+	// history
+	var p = this.video ? video.currentPassage : this.currentPassage;
+	if(p && p.title){
+		this.history.push(p.title);
+	}else{
+		console.warn('History skipped because passage has no title:',p);
+	}
+	this.currentPassage = null;
+	video.currentPassage = null;
+
+	if(!this.video) {
 		// parse requested passage
-		if(this.currentPassage.title){
-			this.history.push(this.currentPassage.title);
-		}else{
-			console.warn('History skipped because passage has no title:',this.currentPassage);
-		}
 		this.currentPassage = passageToText(__newPassage, size.x/2);
-		this.currentPassage.title = __passage;
+		this.currentPassage.title = __newPassage.title;
 
 		// add parsed passage
 		for(var i = 0; i < this.currentPassage.text.length; ++i){
@@ -611,9 +577,66 @@ Game.prototype.goto = function(__passage) {
 		}
 		// re-center text
 		textContainer.y = size.y*3/4 - textContainer.height/2;
-		return;
-	}.bind(this))
-	.then(fadeIn.bind(undefined, textContainer));
+	}else{
+		var textWidth = size.x/3;
+		// parse requested passage
+		video.currentPassage = passageToText(__newPassage, textWidth);
+		video.currentPassage.title = __newPassage.title;
+
+		// bg
+		if(video.passageContainer.bg){
+			video.passageContainer.removeChild(video.passageContainer.bg);
+			video.passageContainer.bg.destroy();
+		}
+		{
+			var g = new PIXI.Graphics();
+			g.beginFill(0,1);
+			g.drawRect(0,0,1,1);
+			g.endFill();
+			video.passageContainer.bg = new PIXI.Sprite(g.generateTexture());
+			g.destroy();
+		}
+		video.passageContainer.bg.height = 0;
+
+
+		// add parsed passage
+		for(var i = 0; i < video.currentPassage.text.length; ++i){
+			video.passageContainer.textContainer.addChild(video.currentPassage.text[i]);
+		}
+		video.passageContainer.bg.height = video.passageContainer.textContainer.height + border.outer*2;
+		video.passageContainer.bg.width = textWidth + border.outer*2;
+		video.passageContainer.addChildAt(video.passageContainer.bg, 0);
+		// border
+		{
+			if(video.passageContainer.border){
+				video.passageContainer.removeChild(video.passageContainer.border);
+				video.passageContainer.border.destroy();
+			}
+			video.passageContainer.border = new PIXI.Sprite(getBorderTex(video.passageContainer.bg,false))
+			video.passageContainer.addChild(video.passageContainer.border);
+		}
+		// re-center text
+		video.passageContainer.x = Math.floor(size.x/2 - textWidth/2);
+		video.passageContainer.y = Math.floor(size.y/4 - video.passageContainer.height/2);
+	}
+	return;
+};
+
+Game.prototype.goto = function(__passage) {
+	var t = this.video ? video.passageContainer.textContainer : textContainer;
+	console.log('Going to passage:', __passage);
+	return fadeOut(t)
+	.then(parsePassage.bind(undefined, passages[__passage]))
+	.then(function(__newPassage){
+		__newPassage.title = __passage;
+		return __newPassage;
+	})
+	.catch(function(__err){
+		console.error('Failed to parsePassage:',__passage,'\n',__err);
+		return parsePassage(passages['DEFAULT']);
+	})
+	.then(this.displayPassage.bind(this))
+	.then(fadeIn.bind(undefined, t));
 };
 
 Game.prototype.back = function() {

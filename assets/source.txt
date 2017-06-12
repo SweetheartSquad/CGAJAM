@@ -87,7 +87,7 @@ The estate is unbelievable. It looks more like a small town. This must belong to
 ::kitchen
 The kitchen is big, but not as dramatic as the rest of the rooms. It's clearly sizeable enough to prepare a banquet, but nothing is ostentatious. It's a functional room.
 
-(!this.chefdone){A [[chef|this.showVideo().then(this.goto.bind(this,'chef'));]] is chopping vegetables nearby. }
+(!this.chefdone){A [[chef|this.setVideo('vid2').then(this.goto.bind(this,'chef'));]] is chopping vegetables nearby. }
 (this.chefdone){A chef is chopping vegetables nearby. }
 There are a large number of [[kitchen utensils]] on the countertops.
 
@@ -115,11 +115,10 @@ Behind you is the door to the [[dining room]].
 
 
 ::chef stuff
+(this.chefdone=true){}
 "I don't know much about most of those things. If you need to make a new ardanthium conduit, though, all my utensils are made out of ardanthium. You could probably use a set of tongs or something!"
 
-[[Thank you!|this.goto('kitchen')]]
-
-(this.chefdone=true){}
+[[Thank you!|this.hideVideo().then(this.goto.bind(this,'kitchen'))]]
 
 
 ::kitchen utensils
