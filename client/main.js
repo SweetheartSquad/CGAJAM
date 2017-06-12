@@ -86,10 +86,10 @@ function init(){
 		y: 0.9
 	};
 	var mask = {
-		x: size.x*(1-maskRatio.x)/2,
-		y: size.y*(1-maskRatio.y)/2,
-		w: size.x*maskRatio.x,
-		h: size.y*maskRatio.y
+		x: Math.floor(size.x*(1-maskRatio.x)/2),
+		y: Math.floor(size.y*(1-maskRatio.y)/2),
+		w: Math.ceil(size.x*maskRatio.x),
+		h: Math.ceil(size.y*maskRatio.y)
 	};
 	{
 		var g = new PIXI.Graphics();
@@ -152,7 +152,7 @@ function init(){
 	video.container.alpha = 0;
 
 	textContainer = new PIXI.Container();
-	textContainer.x = size.x/4;
+	textContainer.x = Math.floor(size.x/4);
 	textContainer.alpha = 0;
 	textContainer.targetAlpha = 0;
 
@@ -293,8 +293,8 @@ function update(){
 	scaledMouse.x = mouse.pos.x / scaleMultiplier;
 	scaledMouse.y = mouse.pos.y / scaleMultiplier;
 
-	mouseSprite.position.x = scaledMouse.x;
-	mouseSprite.position.y = scaledMouse.y;
+	mouseSprite.position.x = Math.floor(scaledMouse.x);
+	mouseSprite.position.y = Math.floor(scaledMouse.y);
 	mouseSprite.tint = mouseSprite2.tint = offWhite;
 	mouseSprite2.position.x = lerp(mouseSprite2.x, mouseSprite.x, 0.75);
 	mouseSprite2.position.y = lerp(mouseSprite2.y, mouseSprite.y, 0.75);
@@ -507,8 +507,8 @@ Game.prototype.showVideo = function() {
 	//video.passageContainer.bg.height +=  border.outer*2;
 	// re-center text
 	//textContainer.y = size.y*3/4 - textContainer.height/2;
-	video.passageContainer.x = size.x/2 - video.passageContainer.width/2;
-	video.passageContainer.y = size.y/4 - video.passageContainer.height/2;
+	video.passageContainer.x = Math.floor(size.x/2 - video.passageContainer.width/2);
+	video.passageContainer.y = Math.floor(size.y/4 - video.passageContainer.height/2);
 };
 
 Game.prototype.hideVideo = function() {
