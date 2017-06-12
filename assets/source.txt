@@ -7,6 +7,9 @@ This is the start menu
 [[options|this.goto('OPTIONS');]]
 [[api test|this.goto('API TEST');]]
 
+
+[[kitchen]]
+
 ::OPTIONS
 Palette: [[CGA0|this.enableShader();this.setPalette(0);]] [[CGA1|this.enableShader();this.setPalette(1);]] [[N/A|this.disableShader();]]
 Scaling: [[1:1|scaleMode=2;_resize();]] [[scale-to-fit|scaleMode=1;_resize();]] [[scale-in-multiples|scaleMode=0;_resize();]]
@@ -81,3 +84,46 @@ The estate is unbelievable. It looks more like a small town. This must belong to
 [[Go back to your ship|this.goto('around these parts')]]
 
 
+::kitchen
+The kitchen is big, but not as dramatic as the rest of the rooms. It's clearly sizeable enough to prepare a banquet, but nothing is ostentatious. It's a functional room.
+
+(!this.chefdone){A [[chef|this.showVideo().then(this.goto.bind(this,'chef'));]] is chopping vegetables nearby. }
+(this.chefdone){A chef is chopping vegetables nearby. }
+There are a large number of [[kitchen utensils]] on the countertops.
+
+Behind you is the door to the [[dining room]].
+
+
+::chef
+"Oh, uh, members aren't supposed to be in the kitchen. You'd better head back to the garden party."
+
+[[I'm not a member|this.goto('chef oh')]]
+[[What are you talking about?|this.goto('chef oh')]]
+
+
+::chef oh
+"Oh! Uh... what are you doing here? Am I in trouble?"
+
+[[I crashed my ship nearby and I need to make repairs.|this.goto('chef stuff')]]
+[[Why would you be in trouble?|this.goto('chef nervous')]]
+
+
+::chef nervous
+"Oh, uh, never mind. Nothing. Nothing! Uh... Why are you here, then?"
+
+[[I need some materials to repair my ship.|this.goto('chef stuff')]]
+
+
+::chef stuff
+"I don't know much about most of those things. If you need to make a new ardanthium conduit, though, all my utensils are made out of ardanthium. You could probably use a set of tongs or something!"
+
+[[Thank you!|this.goto('kitchen')]]
+
+(this.chefdone=true){}
+
+
+::kitchen utensils
+You sift through the kitchen utensils. (!this.chefdone){You're no kitchen expert, but none of this looks useful to you.}
+(this.chefdone){(this.ardanthium=true){}You find a set of ardanthium tongs. You can use these to make a conduit.}
+
+[[back|this.goto('kitchen')]]

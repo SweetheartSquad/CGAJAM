@@ -444,11 +444,13 @@ Game.prototype.endAction = function() {
 	}.bind(this));
 };
 
+Game.prototype.__eval = function(__s){
+	return eval(__s);
+};
+
 Game.prototype.eval = function(__script) {
 	return this.startAction()
-	.then(function(__s){
-		return eval(__s);
-	}.bind(this, __script))
+	.then(this.__eval.bind(this, __script))
 	.then(this.endAction.bind(this));
 };
 
@@ -700,15 +702,38 @@ function parsePassages(__source) {
 	return passages;
 }
 
-function parsePassage(__source){
+function parseConditionals(__source) {
+	var regex = /\((.*?)\)\{(.*)\}\s*?\n{0,1}/g;
+	var sections = __source.split(regex);
+	
+	var result = [];
+	for(var i = 0; i < sections.length; i += 3){
+		result.push(sections[i]);
+		if (api.__eval(sections[i+1])) {
+			result.push(sections[i+2]);
+		}
+	}
+	return result.join('');
+}
 
+function parseLinks(__source) {
 	// break out links (links are inside double square brackets, i.e. [[link]] )
 	// result will be an array in format [plain-text,whitespace,link, plain-text,whitespace,link, ...]
-	// note: not 
 	regexSource = /(\s)*?\[{2}(.*?)\]{2}/g;
-	__source = __source.split(regexSource);
+	return __source.split(regexSource);
+}
 
-	console.debug(__source);
+function parsePassage(__source) {
+	console.log('source: ',__source);
+	var s;
+	do{
+		s = __source;
+		__source=parseConditionals(s);
+	}while(s !== __source);
+	console.log('conditioned source:',__source);
+	__source = parseLinks(__source);
+	console.log('linked source:',__source);
+
 	// create word list
 	// (links are always one "word")
 	var words = [];
@@ -736,6 +761,7 @@ function parsePassage(__source){
 			words.splice(i,1);
 		}
 	}
+	console.log('Parsed passage: ',words);
 	return words;
 }
 
@@ -821,5 +847,6 @@ function passageToText(__passage, __maxWidth) {
 			passage.links.push(passage.text[i]);
 		}
 	}
+	console.log('Converted passage to text: ',passage);
 	return passage;
 }
