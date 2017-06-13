@@ -488,6 +488,7 @@ Game.prototype.setVideo = function(__video) {
 	.then(function(){
 		// swap video
 		video.video = PIXI.loader.resources[__video].data;
+		greenScreen_filter.uniforms["uScreenMode"] = PIXI.loader.resources[__video].metadata.screenMode;
 		if(video.baseTexture){
 			video.baseTexture.destroy();
 		}
