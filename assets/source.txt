@@ -1,14 +1,15 @@
 hey here's some garbo that shouldn't get parsed
 
+::DEFAULT
+This page shows up when a passage failed to parse, or doesn't even exist. Try checking the link for spelling errors or the console logs for more detail on the error.
+[[back|this.back();]]
+
 ::START
 This is the start menu
 
 [[start|this.goto('INTRO');]]
 [[options|this.goto('OPTIONS');]]
 [[api test|this.goto('API TEST');]]
-
-
-[[kitchen]]
 
 ::OPTIONS
 Palette: [[CGA0|this.enableShader();this.setPalette(0);]] [[CGA1|this.enableShader();this.setPalette(1);]] [[N/A|this.disableShader();]]
@@ -28,12 +29,10 @@ API TEST
 GOTO TEST
 [[back|this.back()]]
 
+
 ::VIDEO TEST
 Nice ship, it would be such a shame if something were to... happen to it.
 
-::DEFAULT
-This page shows up when a passage failed to parse, or doesn't even exist. Try checking the link for spelling errors or the console logs for more detail on the error.
-[[back|this.back();]]
 
 ::INTRO
 Of course everything is going wrong on your vacation. You get away from the base for a five day getaway in the historic foothills of Charon and you're one day behind, two suitcases short, and three hundred thousand miles from the bed and breakfast you booked. You're only just now passing [[Venus]].
@@ -74,20 +73,68 @@ Your ship has seen better days, but you're confident it'll pull through. Your B-
 
 To repair your ship, you need to find a toolbox, an engine band, and a range emitter.
 
-[[back|this.goto('around these parts')]]
+[[Go back|this.back()]]
 
 
 ::hideously large estate
 The estate is unbelievable. It looks more like a small town. This must belong to Cairo McVeigh. Rumour has it that he never leaves his estate, so you're sure you can catch him. Whether he'll help a poor schmuck like you might be another issue. 
 
-[[Go to the estate]]
+[[Go to the estate|this.goto('estate')]]
 [[Go back to your ship|this.goto('around these parts')]]
+
+
+::estate
+You walk along a dirt pathway that leads to the foot of the mountain. A single staircase winds up to the front gates of the estate. It takes you a good hour to make it up.
+
+Finally, you reach the front gate. Beyond the bars you can see a lush courtyard, filled with fountains, trees, and gravel pathways. Next to the gate is a video screen and what you assume is a doorbell. A gatebell. Whatever.
+
+You can hear the sound of [[fountains and birds]], but there's no sign of any people.
+
+[[Ring the bell|this.goto('bell')]]
+[[Go back to your ship|this.goto('around these parts')]]
+
+
+::bell
+You ring the bell. A message pops up on a little screen above the button.
+
+"No need to ring, friend! Please come in."
+
+You think this is a bit weird, since you are not friends with Cairo McVeigh. But you need to fix your ship.
+
+The gate opens.
+
+[[Enter the gate|this.goto('grounds')]]
+
+
+::grounds
+You enter the gate. You follow the gravel pathway, admiring the beauty of the grounds. You don't run into anyone, but you can still faintly hear the sound of conversation.
+
+The path leads you to an enormous mansion. It's easily five, ten times as big as your house, and it's only one of the many estate buildings you could see from the base of the mountain.
+
+The mansion doors are open.
+
+[[Enter the mansion|this.goto('foyer')]]
+
+
+::foyer
+You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stands in the middle of the room, at the foot of a gigantic, two-pronged staircase. A velvet carpet connects the front door to the stairs and to two doors on your left and right. 
+
+[[Go left|this.goto('dining room')]]
+[[Go right|this.goto('sitting room')]]
+[[Go upstairs|this.goto('upstairs hallway')]]
+[[Go outside|this.goto('grounds2')]]
+
+
+::dining room
+You enter a lavish dining room. Fifteen chairs sit at an enormous table. Video screens hang like paintings around the room, each showing clips of Cairo McVeigh posing, interacting with the public, and performing outstanding feats.
+
+[[Go to kitchen|this.goto('kitchen')]]
 
 
 ::kitchen
 The kitchen is big, but not as dramatic as the rest of the rooms. It's clearly sizeable enough to prepare a banquet, but nothing is ostentatious. It's a functional room.
 
-(!this.chefdone){A [[chef|this.setVideo('vid2').then(this.goto.bind(this,'chef'));]] is chopping vegetables nearby. }
+(!this.chefdone){A [[chef]] is chopping vegetables nearby. }
 (this.chefdone){A chef is chopping vegetables nearby. }
 There are a large number of [[kitchen utensils]] on the countertops.
 
@@ -115,10 +162,9 @@ Behind you is the door to the [[dining room]].
 
 
 ::chef stuff
-(this.chefdone=true){}
-"I don't know much about most of those things. If you need to make a new ardanthium conduit, though, all my utensils are made out of ardanthium. You could probably use a set of tongs or something!"
+(this.chefdone=true){}"I don't know much about most of those things. If you need to make a new ardanthium conduit, though, all my utensils are made out of ardanthium. You could probably use a set of tongs or something!"
 
-[[Thank you!|this.hideVideo().then(this.goto.bind(this,'kitchen'))]]
+[[Thank you!|this.goto('kitchen')]]
 
 
 ::kitchen utensils
@@ -126,3 +172,211 @@ You sift through the kitchen utensils. (!this.chefdone){You're no kitchen expert
 (this.chefdone){(this.ardanthium=true){}You find a set of ardanthium tongs. You can use these to make a conduit.}
 
 [[back|this.goto('kitchen')]]
+
+
+::sitting room
+The sitting room is very modern. It reminds you of a hotel lobby - grand, a little impersonal, and stacks of touchpads on the coffee table.
+
+Save for a few plants and video screens, there's not much to see or do.
+
+Through a set of glass doors there is a beautiful [[garden]].
+
+
+::garden
+Outside of the sitting room is a garden. It's just as lush as the grounds in the front of the mansion, but contained by a fence. There is a white altar of sorts in a tent in the corner of the garden. There are a few garden chairs near the tent.
+
+(!this.toolbox){A [[person in a black robe]] mills about nearby.}
+(this.toolbox){A person in a sky blue robe mills about nearby.}
+
+[[Go back to the sitting room|this.goto('sitting room')]]
+
+
+::person in a black robe
+"Good evening, friend. Where is your robe?"
+
+[[I lost it.|this.goto('cult robe')]]
+[[What robe?|this.goto('cult who')]]
+
+
+::cult robe
+"Oh dear. You should get a new one right away! He won't be happy about this."
+
+[[I just need to repair my ship.|this.goto('cult parts')]]
+[[Who are you talking about?|this.goto('cult who')]]
+
+
+::cult who
+"Ah, you must be new. Forgive me. Do you need any help?"
+
+[[I need parts to repair my ship.|this.goto('cult parts')]]
+
+
+::cult parts
+(this.toolbox=true){}
+"Ooh, er, there's a toolbox around here somewhere! We had a repairman and he... er... left it here... ah, here it is."
+
+[[Thank you.|this.goto('cult goodbye')]]
+
+
+::cult goodbye
+"Good luck with your ship!"
+
+[[Goodbye.|this.goto('garden')]]
+
+
+::upstairs hallway
+The upstairs hallway is lightly decorated. There are a number of doors, most of which are locked. There's one unlocked door that seems to lead to a [[guest bedroom]].
+
+[[Go back downstairs|this.goto('foyer')]]
+
+
+::guest bedroom
+The bedroom is simple. There is a [[twin bed]], a window, a [[closet]], and a [[chest of drawers]].
+
+[[Go back into the hallway|this.goto('upstairs hallway')]]
+
+
+::twin bed
+The bed is very nicely made. There's nothing underneath.
+
+[[Go back|this.back()]]
+
+
+::closet
+The closet is immaculate. There is an ironing board and an iron.
+
+[[Go back|this.back()]]
+
+
+::chest of drawers
+Most of the drawers are full of black robes. There are a few street clothes as well, including t-shirts, underwear, socks, and [[jeans]].
+
+[[Go back|this.back()]]
+
+
+::jeans
+(this.jeans=true){}
+The jeans, you notice, are stretchy. If you cut a loop out of them, you'd have an engine band. Not a great one, but one that could hold long enough to get to a planet with a mechanic shop. But you'll need something to cut the jeans.
+
+[[Take the jeans|this.goto('guest bedroom')]]
+
+
+::grounds2
+You stand on the gravel pathway in front of the mansion. Arrangements of trees and flowers litter the grounds around you.
+
+[[Go inside|this.goto('foyer')]]
+[[Go back to your ship|this.goto('ship')]]
+
+
+::ending start
+With all the pieces you need, you're ready to leave this bizarre paradise. You feel like there must be something more going on here, some mystery, but you're already late for your getaway and you want to make it before the salsa dancing class.
+
+As you go to leave the mansion, though, you hear [[a sound behind you]].
+
+
+::a sound behind you
+You turn and see a strange man in a fashionable suit. He looks familiar to you, but you can't quite place him. [[He gestures toward you]].
+
+
+::He gestures toward you
+"Stop right there, friend! I'm afraid I can't let you leave."
+
+[[Why not?|this.goto('cairo why')]]
+[[Who are you?|this.goto('cairo who')]]
+
+
+::cairo who
+"My name is Cairo McVeigh, founder and CEO of Excelsior, and the owner of this fine establishment!"
+
+[[Why can't you let me leave?|this.goto('cairo why')]]
+
+
+::cairo why
+"Ah, yes! I was just about to get to that. Adrian, please collect our guest!"
+
+Someone grabs you from behind and shoves [[a bag over your head]].
+
+
+::a bag over your head
+You wake up and find yourself tied to a chair in the dining room. Cairo McVeigh paces back and forth before you, muttering.
+
+[[Hello?|this.goto('cairo hello')]]
+[[What's going on??|this.goto('cairo hello')]]
+
+
+::cairo hello
+"Ah, you're awake! I'm sorry for the theatrics, but I couldn't let you leave before I gave you my pitch."
+
+[[What pitch?|this.goto('cairo pitch')]]
+[[Let me go!|this.goto('cairo go')]]
+
+
+::cairo go
+"Please, just listen to me. I don't want to hurt you. I just need you to help me."
+
+[[With what?|this.goto('cairo pitch')]]
+[[Let me go!!|this.goto('cairo no')]]
+
+
+::cairo pitch
+"In my mind, I saw it. It was beautiful... It was the finest scenic getaway and spa this side of the Milky Way! At least, that's what the ads were supposed to say."
+
+[[Ads?|cairo ad]]
+[[Let me go!!!|cairo ad]]
+
+
+::cairo ad
+"I blew my whole budget on this ad campaign, but those fiends just ran off with my money and never published a single ad. Now no one will come here! And Sneed is going around spreading rumours that I run some sort of cult... it's killing me!"
+
+[[The black robes are very culty.|cairo robes]]
+[[Who took your money?|cairo money]]
+
+
+::cairo robes
+"I wanted blue bathrobes. They gave me black cloaks instead. Horrid! They said was some sort of manufacturing mistake... Likely story. Animals! Charlatans!"
+
+[[Who are you talking about?|cairo money]]
+
+
+::cairo money
+"Advantage Image Consulting. They're crooks! They swindled me out of my fortune. They said they would take care of everything. They said they would help me make this place the ultimate getaway! But now it's just me and my staff, living off the land, hoping for a customer. Any customer. Stupid. So, so stupid."
+
+[[So why kidnap me?|cairo kidnap]]
+
+
+::cairo kidnap
+"Oh dear, right! Ugh... I'm sorry to have kidnapped you. That was unnecessary. I'm just... goodness. This whole thing is a mess. A horrible, horrible mess..."
+
+[[Can I go now?|cairo need]]
+
+
+::cairo need
+"No... you can't leave. You need to help me! Just... stay for a few days. Leave a review. A bad review, even! I just need to prove that this resort exists. It won't cost you a thing."
+
+[[Uh, okay.|stay ending]]
+[[No!!!!|go ending]]
+
+
+::stay ending
+Oh god, thank you. Thank you thank you thank you. You won't regret this. I'll have my staff repair your ship and fix you a room. 
+
+Cairo unties you and leads you into the foyer. Several robed figures usher you up the stairs to one of the guest rooms. After you settle in, another robed figure enters your room with a lavish spread of hors d'oeuvres and a massage table. Hey, now. This isn't so bad. Maybe after enough massages you'll leave the kidnapping out of your Yelp review.
+
+As for your Cheron package, well... it's probably too late for a refund, and if you're being completely honest, it was going to be too crowded and you were going to be miserable drinking your watery cocktails by the dirty poolside, and you'd try desperately to pretend that being on vacation was better than being at work just because you paid through the nose for it. And hey, a robed figure just came into your room with a pitcher of margaritas, so, to hell with it. A Venus vacation it is.
+
+
+
+
+::go ending
+I... uh... well... I did kidnap you, I suppose. That's fair.
+
+Yeah.
+
+Er... okay. You can go. But please just... mention I have a spa here. To somebody. Anybody. I just want people to know it's here. It would mean the world to me.
+
+Cairo unties you. You rush out of the estate and get to your ship. As you repair your ship, you decide to extend your Cheron getaway. A few days, maybe. A few weeks. Whatever it takes to forget that you ever had the misfortune of crash landing on Venus.
+
+Before you leave the planet's surface, you leave a Yelp review for McVeigh's spa. It's heavy on the kidnapping aspect, but it does mention the gorgeous grounds and facilities. You give the experience two our of five stars.
+
+
+
