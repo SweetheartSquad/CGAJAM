@@ -66,7 +66,7 @@ To repair your ship, you need to find a toolbox, an engine band, and a range emi
 ::hideously large estate
 The estate is unbelievable. It looks more like a small town. This must belong to Cairo McVeigh. Rumour has it that he never leaves his estate, so you're sure you can catch him. Whether he'll help a poor schmuck like you might be another issue.
 
-[[Go to the estate|this.goto('estate')]]
+[[Go to the estate|this.setBg ('gate').then (this.goto.bind (this, 'estate'))]]
 
 
 ::estate
@@ -86,7 +86,7 @@ You think this is a bit weird, since you are not friends with Cairo McVeigh. But
 
 The gate opens.
 
-[[Enter the gate|this.goto('grounds')]]
+[[Enter the gate|this.setBg ('grounds').then (this.goto.bind (this, 'grounds'))]]
 
 
 ::grounds
@@ -96,15 +96,15 @@ The path leads you to an enormous mansion. It's easily five, ten times as big as
 
 The mansion doors are open.
 
-[[Enter the mansion|this.goto('foyer')]]
+[[Enter the mansion|this.setBg ('foyer1').then (this.goto.bind (this, 'foyer'))]]
 
 
 ::foyer
 You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stands in the middle of the room, at the foot of a gigantic, two-pronged staircase. A velvet carpet connects the front door to the stairs and to two doors on your left and right.
 
-[[Go left|this.goto('dining room')]]
-[[Go right|this.goto('sitting room')]]
-[[Go upstairs|this.goto('upstairs hallway')]]
+[[Go left|this.setBg ('dining room').then (this.goto.bind (this, 'dining room'))]]
+[[Go right|this.setBg ('chairs2').then (this.goto.bind (this, 'sitting room'))]]
+[[Go upstairs|this.setBg ('hallway').then (this.goto.bind (this, 'upstairs hallway'))]]
 (this.ardanthium && this.band && this.toolbox){[[Go outside|this.goto('ending start')]]}
 
 
@@ -222,15 +222,16 @@ The garden is just as lush as the grounds in the front of the mansion, but conta
 
 
 ::upstairs hallway
-The upstairs hallway is lightly decorated. There are a number of doors, most of which are locked. There's one unlocked door that seems to lead to a [[guest bedroom]].
+The upstairs hallway is lightly decorated. There are a number of doors, most of which are locked. There's one unlocked door that seems to lead to a guest bedroom.
 
+[[Go to guest bedroom|this.setBg ('bedroom').then (this.goto.bind (this, 'guest bedroom'))]]
 [[Go back downstairs|this.goto('foyer')]]
 
 
 ::guest bedroom
-The bedroom is simple. There is a [[twin bed]], a window, a [[closet]], and a [[chest of drawers]].
+The bedroom is simple. There is a [[twin bed]], a window, a [[closet]], and a [[chest of drawers|this.setBg ('drawer').then (this.goto.bind (this, 'chest of drawers'))]].
 
-[[Go back into the hallway|this.goto('upstairs hallway')]]
+[[Go back into the hallway|this.setBg ('hallway').then (this.goto.bind (this, 'upstairs hallway'))]]
 
 
 ::twin bed
