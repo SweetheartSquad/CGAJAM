@@ -192,7 +192,7 @@ function init(){
 	screen_filter.uniforms["palette"] = screen_filter.uniforms["palette"] ? 0 : 1;
 	api.eval('this.setPalette('+p+');') // sets the initial palette
 	.then(api.eval.bind(api,'this.goto("START");')) // sets the initial passage
-	.then(api.eval.bind(api,'this.setBg("garden");')); // sets the initial background
+	.then(api.eval.bind(api,'this.setBg("estate");')); // sets the initial background
 
 	// start the main loop
 	main();
