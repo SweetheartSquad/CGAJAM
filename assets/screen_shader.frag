@@ -19,7 +19,7 @@ const vec3 green = vec3(off, on, off);
 const vec3 yellow = vec3(on, on, off);
 
 uniform float palette; // 0 -> 1 == CGA1 -> CGA1
-float brightness = 0.75; // overall brightness threshold
+float brightness = 0.65; // overall brightness threshold
 
 // amount of black around palette edges 
 // higher = more black, zero = allow flat blocks of colour

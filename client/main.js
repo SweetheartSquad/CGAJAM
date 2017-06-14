@@ -13,7 +13,7 @@ function main(){
 }
 
 offWhite = rgbToHex(1.0*255, 0.95*255, 0.95*255);
-linkHover = rgbToHex(120,120,120);
+linkHover = rgbToHex(150,150,150);
 linkNormal = rgbToHex(0.92*255,0.92*255,255);
 
 border = {
