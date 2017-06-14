@@ -122,7 +122,7 @@ You stand on the gravel pathway in front of the mansion. Arrangements of trees a
 You enter a lavish dining room. Fifteen chairs sit at an enormous table. Video screens hang like paintings around the room, each showing clips of Cairo McVeigh posing, interacting with the public, and performing outstanding feats.
 
 [[Go to the kitchen|this.goto('kitchen')]]
-[[Go to the foyer|this.goto(‘foyer’)]]
+[[Go to the foyer|this.goto('foyer')]]
 
 
 ::kitchen
@@ -132,7 +132,7 @@ The kitchen is big, but not as dramatic as the rest of the rooms. It's clearly s
 (this.chefdone){A chef is chopping vegetables nearby. }
 There are a large number of [[kitchen utensils]] on the countertops.
 
-[[Go back to the dining room|this.goto(‘dining room’)]].
+[[Go back to the dining room|this.goto('dining room')]].
 
 
 ::chef
@@ -178,8 +178,8 @@ Save for a few plants and video screens, there's not much to see or do.
 
 Through a set of glass doors there is a beautiful garden.
 
-[[Go to the garden|this.goto(‘garden’)]]
-[[Go to the foyer|this.goto(‘foyer’)]]
+[[Go to the garden|this.goto('garden')]]
+[[Go to the foyer|this.goto('foyer')]]
 
 
 ::garden
@@ -351,13 +351,13 @@ You wake up and find yourself tied to a chair in the dining room. Cairo McVeigh 
 
 
 ::stay ending
-“Oh god, thank you. Thank you thank you thank you. You won't regret this. I'll have my staff repair your ship and fix you a room.” 
+"Oh god, thank you. Thank you thank you thank you. You won't regret this. I'll have my staff repair your ship and fix you a room." 
 
-[[Okay.|this.goto(‘stay2’)]]
+[[Okay.|this.goto('stay2')]]
 
 
 ::stay2
-Cairo unties you and leads you into the foyer. Several robed figures usher you up the stairs to one of the guest rooms. After you settle in, another robed figure enters your room with a lavish spread of hors d'oeuvres and a massage table. Hey, now. This isn't so bad. Maybe after enough massages you'll leave the kidnapping out of your [[Yelp review|this.goto(‘stay3’)]].
+Cairo unties you and leads you into the foyer. Several robed figures usher you up the stairs to one of the guest rooms. After you settle in, another robed figure enters your room with a lavish spread of hors d'oeuvres and a massage table. Hey, now. This isn't so bad. Maybe after enough massages you'll leave the kidnapping out of your [[Yelp review|this.goto('stay3')]].
 
 
 ::stay3
@@ -367,20 +367,20 @@ As for your Cheron package, well... it's probably too late for a refund, and if 
 
 
 ::go ending
-“I… uh... well... I did kidnap you, I suppose. That's fair.”
+"I… uh... well... I did kidnap you, I suppose. That's fair."
 
-[[Yeah.|this.goto(‘go2’)]]
+[[Yeah.|this.goto('go2')]]
 
 
 ::go2
-“Er... okay. You can go. But please just... mention I have a spa here. To somebody. Anybody. I just want people to know it's here. It would mean the world to me.”
+"Er... okay. You can go. But please just... mention I have a spa here. To somebody. Anybody. I just want people to know it's here. It would mean the world to me."
 
-[[Yes.|this.goto(‘go3’)]]
-[[No.|this.goto(‘go3’)]]
-[[Maybe.|this.goto(‘go3’)]]
+[[Yes.|this.goto('go3')]]
+[[No.|this.goto('go3')]]
+[[Maybe.|this.goto('go3')]]
 
 ::go3
-Cairo unties you. You rush out of the estate and get to your ship. As you repair your ship, you decide to extend your Cheron getaway. A few days, maybe. A few weeks. Whatever it takes to forget that you ever had the [[misfortune|this.goto(‘go4’)]] of crash-landing on Venus.
+Cairo unties you. You rush out of the estate and get to your ship. As you repair your ship, you decide to extend your Cheron getaway. A few days, maybe. A few weeks. Whatever it takes to forget that you ever had the [[misfortune|this.goto('go4')]] of crash-landing on Venus.
 
 ::go4
 Before you leave the planet's surface, you leave a Yelp review for McVeigh's spa. It's heavy on the kidnapping aspect, but it does mention the gorgeous grounds and facilities. You give the experience two our of five stars.
