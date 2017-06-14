@@ -64,7 +64,7 @@ To repair your ship, you need to find a toolbox, an engine band, and a range emi
 
 
 ::hideously large estate
-The estate is unbelievable. It looks more like a small town. This must belong to Cairo McVeigh. Rumour has it that he never leaves his estate, so you're sure you can catch him. Whether he'll help a poor schmuck like you might be another issue. 
+The estate is unbelievable. It looks more like a small town. This must belong to Cairo McVeigh. Rumour has it that he never leaves his estate, so you're sure you can catch him. Whether he'll help a poor schmuck like you might be another issue.
 
 [[Go to the estate|this.goto('estate')]]
 
@@ -100,7 +100,7 @@ The mansion doors are open.
 
 
 ::foyer
-You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stands in the middle of the room, at the foot of a gigantic, two-pronged staircase. A velvet carpet connects the front door to the stairs and to two doors on your left and right. 
+You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stands in the middle of the room, at the foot of a gigantic, two-pronged staircase. A velvet carpet connects the front door to the stairs and to two doors on your left and right.
 
 [[Go left|this.goto('dining room')]]
 [[Go right|this.goto('sitting room')]]
@@ -307,7 +307,7 @@ You wake up and find yourself tied to a chair in the dining room. Cairo McVeigh 
 "Please, just listen to me. I don't want to hurt you. I just need you to help me."
 
 [[With what?|this.goto('cairo pitch')]]
-[[Let me go!!|this.goto('cairo pitch')//TODO: put another passage here?]]
+[[Let me go!!|this.goto('cairo pitch')]]
 
 
 ::cairo pitch
@@ -350,7 +350,7 @@ You wake up and find yourself tied to a chair in the dining room. Cairo McVeigh 
 
 
 ::stay ending
-"Oh god, thank you. Thank you thank you thank you. You won't regret this. I'll have my staff repair your ship and fix you a room." 
+"Oh god, thank you. Thank you thank you thank you. You won't regret this. I'll have my staff repair your ship and fix you a room."
 
 [[Okay.|this.hideVideo().then(this.goto.bind(this,'stay2'))]]
 
@@ -362,7 +362,7 @@ Cairo unties you and leads you into the foyer. Several robed figures usher you u
 ::stay3
 As for your Charon package, well... it's probably too late for a refund, and if you're being completely honest, it was going to be too crowded and you were going to be miserable drinking your watery cocktails by the dirty poolside, and you'd try desperately to pretend that being on vacation was better than being at work just because you paid through the nose for it. And hey, a robed figure just came into your room with a pitcher of margaritas, so, to hell with it. A Venus vacation it is.
 
-
+[[THE END|this.goto('START')]]
 
 
 ::go ending
@@ -374,15 +374,17 @@ As for your Charon package, well... it's probably too late for a refund, and if 
 ::go2
 "Er... okay. You can go. But please just... mention I have a spa here. To somebody. Anybody. I just want people to know it's here. It would mean the world to me."
 
-[[Yes.|this.hideVideo().then(this.goto.bind(this,'go3'))]]
-[[No.|this.hideVideo().then(this.goto.bind(this,'go3'))]]
-[[Maybe.|this.hideVideo().then(this.goto.bind(this,'go3'))]]
+[[Yes.|this.hideVideo().then(this.yesend=true;this.goto.bind(this,'go3'))]]
+[[No.|this.hideVideo().then(this.noend=true;this.goto.bind(this,'go3'))]]
+[[Maybe.|this.hideVideo().then(this.maybeend=true;this.goto.bind(this,'go3'))]]
 
 ::go3
 Cairo unties you. You rush out of the estate and get to your ship. As you repair your ship, you decide to extend your Charon getaway. A few days, maybe. A few weeks. Whatever it takes to forget that you ever had the [[misfortune|this.goto('go4')]] of crash-landing on Venus.
 
 ::go4
-Before you leave the planet's surface, you leave a Yelp review for McVeigh's spa. It's heavy on the kidnapping aspect, but it does mention the gorgeous grounds and facilities. You give the experience two out of five stars.
 
+(this.yesend){Before you leave the planet's surface, you leave a Yelp review for McVeigh's spa. It's heavy on the kidnapping aspect, but it does mention the gorgeous grounds and facilities. You give the experience two out of five stars.}
+(this.noend){As you fly away, you look down at McVeigh's doomed resort. It's a tragic tale, and one you won't soon forget. Well, maybe after a couple margaritas.}
+(this.maybeend){You consider leaving a Yelp review, but it just doesn't seem worth it. You probably weren't even going to leave one for the bed and breakfast on Charon. You take off in your ship and hope you never land on Venus again.}
 
-
+[[THE END|this.goto('START')]]
