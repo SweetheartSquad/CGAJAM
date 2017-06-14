@@ -495,7 +495,7 @@ Game.prototype.displayPassage = function(__newPassage){
 	}
 
 	// parse requested passage
-	var textWidth = this.video ? size.x/3 : size.x/2;
+	var textWidth = this.video ? size.x/2.2 : size.x/2;
 	this.currentPassage = passageToText(__newPassage, textWidth);
 	this.currentPassage.title = __newPassage.title;
 
@@ -507,7 +507,6 @@ Game.prototype.displayPassage = function(__newPassage){
 		// re-center text
 		textContainer.y = size.y*3/4 - textContainer.height/2;
 	}else{
-		var textWidth = size.x/3;
 		// bg
 		if(video.passageContainer.bg){
 			video.passageContainer.removeChild(video.passageContainer.bg);
