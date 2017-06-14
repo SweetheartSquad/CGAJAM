@@ -121,11 +121,6 @@ function init(){
 			}
 		}
 	}
-	video.currentPassage = {
-		text:[],
-		links:[],
-		title:null
-	};
 	video.texture = new PIXI.Texture(emptyTexture.baseTexture);
 	video.sprite = new PIXI.Sprite(video.texture);
 	video.sprite.filters = [greenScreen_filter];
@@ -241,7 +236,7 @@ function update(){
 	// copy of current passage links
 	// (don't use them directly since they may change on click)
 	var links = [];
-	var activePassage = (api.video > 0 ? video : api).currentPassage;
+	var activePassage = api.currentPassage;
 	if(activePassage){
 		var activeLinks = activePassage.links;
 		for(var i = 0; i < activeLinks.length; ++i){
@@ -497,20 +492,18 @@ Game.prototype.displayPassage = function(__newPassage){
 	}
 
 	// history
-	var p = this.video ? video.currentPassage : this.currentPassage;
-	if(p && p.title){
-		this.history.push(p.title);
+	if(this.currentPassage && this.currentPassage.title){
+		this.history.push(this.currentPassage.title);
 	}else{
-		console.warn('History skipped because passage has no title:',p);
+		console.warn('History skipped because passage has no title:',this.currentPassage);
 	}
-	this.currentPassage = null;
-	video.currentPassage = null;
+
+	// parse requested passage
+	var textWidth = this.video ? size.x/3 : size.x/2;
+	this.currentPassage = passageToText(__newPassage, textWidth);
+	this.currentPassage.title = __newPassage.title;
 
 	if(!this.video) {
-		// parse requested passage
-		this.currentPassage = passageToText(__newPassage, size.x/2);
-		this.currentPassage.title = __newPassage.title;
-
 		// add parsed passage
 		for(var i = 0; i < this.currentPassage.text.length; ++i){
 			textContainer.addChild(this.currentPassage.text[i]);
@@ -519,10 +512,6 @@ Game.prototype.displayPassage = function(__newPassage){
 		textContainer.y = size.y*3/4 - textContainer.height/2;
 	}else{
 		var textWidth = size.x/3;
-		// parse requested passage
-		video.currentPassage = passageToText(__newPassage, textWidth);
-		video.currentPassage.title = __newPassage.title;
-
 		// bg
 		if(video.passageContainer.bg){
 			video.passageContainer.removeChild(video.passageContainer.bg);
@@ -540,8 +529,8 @@ Game.prototype.displayPassage = function(__newPassage){
 
 
 		// add parsed passage
-		for(var i = 0; i < video.currentPassage.text.length; ++i){
-			video.passageContainer.textContainer.addChild(video.currentPassage.text[i]);
+		for(var i = 0; i < this.currentPassage.text.length; ++i){
+			video.passageContainer.textContainer.addChild(this.currentPassage.text[i]);
 		}
 		video.passageContainer.bg.height = video.passageContainer.textContainer.height + border.outer*2;
 		video.passageContainer.bg.width = textWidth + border.outer*2;
