@@ -52,7 +52,7 @@ Of course, you're not sure you can call a mechanic [[around these parts]].
 
 
 ::around these parts
-To the east, on top of an enormous mountain, you see a [[hideously large estate]]. Your [[ship]], looking a bit beat up, sits nearby.
+To the east, on top of an enormous mountain, you see a [[hideously large estate|this.setBg ('estate').then (this.goto.bind (this, 'hideously large estate'))]]. Your [[ship]], looking a bit beat up, sits nearby.
 
 
 ::ship
@@ -111,15 +111,15 @@ You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stand
 ::grounds2
 You stand on the gravel pathway in front of the mansion. Arrangements of trees and flowers litter the grounds around you.
 
-[[Go inside|this.goto('foyer')]]
+[[Go inside|this.setBg ('foyer1').then (this.goto.bind (this, 'foyer'))]]
 [[Go back to your ship|this.goto('ship')]]
 
 
 ::dining room
 You enter a lavish dining room. Fifteen chairs sit at an enormous table. Video screens hang like paintings around the room, each showing clips of Cairo McVeigh posing, interacting with the public, and performing outstanding feats.
 
-[[Go to the kitchen|this.goto('kitchen')]]
-[[Go to the foyer|this.goto('foyer')]]
+[[Go to the kitchen|this.setBg ('kitchen').then (this.goto.bind (this, 'kitchen'))]]
+[[Go to the foyer|this.setBg ('foyer1').then (this.goto.bind (this, 'foyer'))]]
 
 
 ::kitchen
@@ -129,7 +129,7 @@ The kitchen is big, but not as dramatic as the rest of the rooms. It's clearly s
 (this.chefdone){A chef is chopping vegetables nearby. }
 There are a large number of [[kitchen utensils]] on the countertops.
 
-[[Go back to the dining room|this.goto('dining room')]].
+[[Go back to the dining room|this.setBg ('dining room').then (this.goto.bind (this, 'dining room'))]].
 
 
 ::chef
@@ -175,8 +175,8 @@ Save for a few plants and video screens, there's not much to see or do.
 
 Through a set of glass doors there is a beautiful garden.
 
-[[Go to the garden|this.goto('garden')]]
-[[Go to the foyer|this.goto('foyer')]]
+[[Go to the garden|this.setBg ('garden').then (this.goto.bind (this, 'garden'))]]
+[[Go to the foyer|this.setBg ('foyer1').then (this.goto.bind (this, 'foyer'))]]
 
 
 ::garden
@@ -185,7 +185,7 @@ The garden is just as lush as the grounds in the front of the mansion, but conta
 (!this.toolbox){A [[person in a black robe|this.setVideo('cult').then(this.goto.bind(this,'person in a black robe'))]] mills about nearby.}
 (this.toolbox){A person in a sky blue robe mills about nearby.}
 
-[[Go back to the sitting room|this.goto('sitting room')]]
+[[Go to the sitting room|this.setBg ('chairs2').then (this.goto.bind (this, 'sitting room'))]]
 
 
 ::person in a black robe
@@ -225,7 +225,7 @@ The garden is just as lush as the grounds in the front of the mansion, but conta
 The upstairs hallway is lightly decorated. There are a number of doors, most of which are locked. There's one unlocked door that seems to lead to a guest bedroom.
 
 [[Go to guest bedroom|this.setBg ('bedroom').then (this.goto.bind (this, 'guest bedroom'))]]
-[[Go back downstairs|this.goto('foyer')]]
+[[Go back downstairs|this.setBg ('foyer').then (this.goto.bind (this, 'foyer')]]
 
 
 ::guest bedroom
@@ -258,7 +258,7 @@ Most of the drawers are full of black robes. There are a few street clothes as w
 (this.jeans=true){}
 The jeans, you notice, are stretchy. If you cut a loop out of them, you'd have an engine band. Not a great one, but one that could hold long enough to get to a planet with a mechanic shop. But you'll need something to cut the jeans.
 
-[[Take the jeans|this.goto('guest bedroom')]]
+[[Take the jeans|this.setBg ('bedroom').then (this.goto.bind (this, 'guest bedroom'))]]
 
 
 ::ending start
