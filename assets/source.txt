@@ -7,7 +7,7 @@ This page shows up when a passage failed to parse, or doesn't even exist. Try ch
 ::START
 A Visitor on Venus
 
-[[Start]]
+[[Start|this.setBg ('space').then (this.goto.bind (this, 'Start'))]]
 [[Options]]
 [[About]]
 
@@ -35,7 +35,7 @@ Sneed's company, KROM, was a direct competitor of Excelsior. When a series of qu
 
 
 ::mansion and grounds
-Since then, you've always been curious about the place. What beautiful vistas would a quintillionaire's private planet hold? What exquisite architectures? What [[grave secrets]]?
+Since then, you've always been curious about the place. What beautiful vistas would a quintillionaire's private planet hold? What exquisite architectures? What [[grave secrets|this.setBg ('ship').then (this.goto.bind (this, 'grave secrets'))]]?
 
 
 ::grave secrets
@@ -49,11 +49,11 @@ You feel the shudder of your engine turn into a sort of wheezing before it shuts
 ::The crash
 Your ship crashes into the planet. Thanks to the forcefields -- and your airbags -- you and your ship survive. When you reboot the system, it appears that despite some scary-looking surface damage, you only need a few repairs before you can get this hunk of bolts back in the air.
 
-Of course, you're not sure you can call a mechanic [[around these parts]].
+Of course, you're not sure you can call a mechanic [[around these parts|this.setBg ('courtyard esque').then (this.goto.bind (this, 'around these parts'))]].
 
 
 ::around these parts
-To the east, on top of an enormous mountain, you see a [[hideously large estate|this.setBg ('estate').then (this.goto.bind (this, 'hideously large estate'))]]. Your [[ship]], looking a bit beat up, sits nearby.
+To the east, on top of an enormous mountain, you see a [[hideously large estate|this.setBg ('estate').then (this.goto.bind (this, 'hideously large estate'))]]. Your [[ship|this.setBg ('ship').then (this.goto.bind (this, 'ship'))]], looking a bit beat up, sits nearby.
 
 
 ::ship
@@ -107,13 +107,14 @@ You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stand
 [[Go right|this.setBg ('chairs2').then (this.goto.bind (this, 'sitting room'))]]
 [[Go upstairs|this.setBg ('hallway').then (this.goto.bind (this, 'upstairs hallway'))]]
 (this.ardanthium && this.band && this.toolbox){[[Go outside|this.goto('ending start')]]}
+(!this.ardanthium || !this.band || !this.toolbox){[[Go outside|this.setBg ('grounds').then (this.goto.bind (this, 'grounds2'))]]}
 
 
 ::grounds2
 You stand on the gravel pathway in front of the mansion. Arrangements of trees and flowers litter the grounds around you.
 
 [[Go inside|this.setBg ('foyer1').then (this.goto.bind (this, 'foyer'))]]
-[[Go back to your ship|this.goto('ship')]]
+[[Go back to your ship|this.setBg ('ship').then (this.goto.bind (this, 'ship'))]]
 
 
 ::dining room
