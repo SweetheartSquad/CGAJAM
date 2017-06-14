@@ -487,7 +487,7 @@ Game.prototype.displayPassage = function(__newPassage){
 	}
 
 	// parse requested passage
-	var textWidth = this.video ? size.x/2.2 : size.x/2;
+	var textWidth = this.video ? size.x/2.2 : size.x/1.9;
 	this.currentPassage = passageToText(__newPassage, textWidth);
 	this.currentPassage.title = __newPassage.title;
 
