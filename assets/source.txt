@@ -385,7 +385,7 @@ As for your Charon package, well... it's probably too late for a refund, and if 
 Cairo unties you. You rush out of the estate and get to your ship. As you repair your ship, you decide to extend your Charon getaway. A few days, maybe. A few weeks. Whatever it takes to forget that you ever had the [[misfortune|this.goto('go4')]] of crash-landing on Venus.
 
 ::go4
-Before you leave the planet's surface, you leave a Yelp review for McVeigh's spa. It's heavy on the kidnapping aspect, but it does mention the gorgeous grounds and facilities. You give the experience two our of five stars.
+Before you leave the planet's surface, you leave a Yelp review for McVeigh's spa. It's heavy on the kidnapping aspect, but it does mention the gorgeous grounds and facilities. You give the experience two out of five stars.
 
 
 
