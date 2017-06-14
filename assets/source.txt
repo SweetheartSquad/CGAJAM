@@ -68,6 +68,7 @@ To repair your ship, you need to find a toolbox, an engine band, and a range emi
 The estate is unbelievable. It looks more like a small town. This must belong to Cairo McVeigh. Rumour has it that he never leaves his estate, so you're sure you can catch him. Whether he'll help a poor schmuck like you might be another issue.
 
 [[Go to the estate|this.setBg ('gate').then (this.goto.bind (this, 'estate'))]]
+[[Go back|this.setBg ('courtyard esque').then (this.goto.bind (this, 'around these parts'))]]
 
 
 ::estate
@@ -101,7 +102,7 @@ The mansion doors are open.
 
 
 ::foyer
-You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stands in the middle of the room, at the foot of a gigantic, two-pronged staircase. A velvet carpet connects the front door to the stairs and to two doors on your left and right.
+You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stands in the middle of the room, at the foot of a gigantic staircase. A velvet carpet connects the front door to the stairs and to two doors on your left and right.
 
 [[Go left|this.setBg ('dining room').then (this.goto.bind (this, 'dining room'))]]
 [[Go right|this.setBg ('chairs2').then (this.goto.bind (this, 'sitting room'))]]
