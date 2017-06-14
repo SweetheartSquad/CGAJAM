@@ -125,13 +125,13 @@ ready(function(){
 	};
 
 
-	/*sounds['bgm']=new Howl({
-		urls:['assets/audio/flatgame recording.ogg'],
+	sounds['bgm']=new Howl({
+		urls:['assets/audio/venus march.wav'],
 		autoplay:true,
 		loop:true,
 		volume:0
 	});
-	sounds['bgm'].fadeIn(1,2000);*/
+	sounds['bgm'].fadeIn(1,3000);
 
 	/*for(var i in CharacterTemplates){
 		if(CharacterTemplates.hasOwnProperty(i)){
