@@ -107,8 +107,8 @@ You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stand
 [[Go left|this.goto('dining room')]]
 [[Go right|this.goto('sitting room')]]
 [[Go upstairs|this.goto('upstairs hallway')]]
-(this.ardanthium && this.band && this.toolbox){[[Go outside|this.goto(‘ending start’)]]}
-(!this.ardanthium || !this.band || !this.toolbox)){[[Go outside|this.goto(‘grounds2’)]]}
+(this.ardanthium && this.band && this.toolbox){[[Go outside|this.goto('ending start')]]}
+(!this.ardanthium || !this.band || !this.toolbox){[[Go outside|this.goto('grounds2')]]}
 
 
 ::grounds2
