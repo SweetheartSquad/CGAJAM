@@ -160,6 +160,23 @@ ready(function(){
 
 	CustomFilter.prototype = Object.create(PIXI.Filter.prototype);
 	CustomFilter.prototype.constructor = CustomFilter;
+	var images = [
+		'bedroom',
+		'chair wall',
+		'chairs',
+		'chairs2',
+		'courtyard esque',
+		'dining room',
+		'drawer',
+		'garden',
+		'garden2',
+		'hallway',
+		'hallway2',
+		'kitchen',
+		'kitchen2',
+		'screen',
+		'sitting room'
+	];
 	PIXI.loader
 		.add('source','assets/source.txt')
 		.add('cursor','assets/cursor.png')
@@ -179,6 +196,10 @@ ready(function(){
 		.add('screen_shader','assets/screen_shader.frag')
 		.add('greenScreen_shader','assets/greenScreen_shader.frag');
 
+
+	for(var i = 0; i < images.length; ++i){
+		PIXI.loader.add(images[i],'assets/img/'+images[i]+'.jpg');
+	}
 	PIXI.loader
 		.on('progress', loadProgressHandler)
 		.load(function(){
