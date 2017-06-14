@@ -744,7 +744,7 @@ function parseConditionals(__source) {
 function parseLinks(__source) {
 	// break out links (links are inside double square brackets, i.e. [[link]] )
 	// result will be an array in format [plain-text,whitespace,link, plain-text,whitespace,link, ...]
-	regexSource = /(\s)*?\[{2}(.*?)\]{2}/g;
+	regexSource = /(\s)?\[{2}(.*?)\]{2}/g;
 	return __source.split(regexSource);
 }
 
