@@ -209,9 +209,6 @@ function onResize() {
 function update(){
 	// game update
 
-
-	var inputs = getInputs();
-
 	if(keys.isJustDown(keys.A)){
 		api.eval('api.showVideo();');
 	}
@@ -330,65 +327,6 @@ function render(){
 	greenScreen_filter.uniforms["uBufferSize"] = [nextPowerOfTwo(video.sprite.width),nextPowerOfTwo(video.sprite.height)];
 	renderer.render(game,renderTexture,true,false);
 	renderer.render(renderSprite,null,true,false);
-}
-
-
-
-function getInputs(){
-	var res = [
-		{
-			move: {
-				x: gamepads.getAxis(gamepads.LSTICK_H),
-				y: gamepads.getAxis(gamepads.LSTICK_V)
-			},
-			punch:
-				gamepads.isJustDown(gamepads.LB) ||
-				gamepads.isJustDown(gamepads.LT) ||
-				keys.isJustDown(keys.Q),
-			uppercut: false
-		},
-		{
-			move: {
-				x: gamepads.getAxis(gamepads.RSTICK_H),
-				y: gamepads.getAxis(gamepads.RSTICK_V)
-			},
-			punch:
-				gamepads.isJustDown(gamepads.RB) ||
-				gamepads.isJustDown(gamepads.RT) ||
-				keys.isJustDown(keys.U),
-			uppercut: false
-		}
-	];
-
-	if(keys.isDown(keys.A) || keys.isDown(keys.LEFT) || gamepads.isDown(gamepads.DPAD_LEFT)){
-		res[0].move.x -= 1;
-	}if(keys.isDown(keys.D) || keys.isDown(keys.RIGHT) || gamepads.isDown(gamepads.DPAD_RIGHT)){
-		res[0].move.x += 1;
-	}if(keys.isDown(keys.W) || keys.isDown(keys.UP) || gamepads.isDown(gamepads.DPAD_UP)){
-		res[0].move.y -= 1;
-	}if(keys.isDown(keys.S) || keys.isDown(keys.DOWN) || gamepads.isDown(gamepads.DPAD_DOWN)){
-		res[0].move.y += 1;
-	}
-
-	if(keys.isDown(keys.J)/* || keys.isDown(keys.LEFT)*/ || gamepads.isDown(gamepads.X)){
-		res[1].move.x -= 1;
-	}if(keys.isDown(keys.L)/* || keys.isDown(keys.RIGHT)*/ || gamepads.isDown(gamepads.B)){
-		res[1].move.x += 1;
-	}if(keys.isDown(keys.I)/* || keys.isDown(keys.UP)*/ || gamepads.isDown(gamepads.Y)){
-		res[1].move.y -= 1;
-	}if(keys.isDown(keys.K)/* || keys.isDown(keys.DOWN)*/ || gamepads.isDown(gamepads.A)){
-		res[1].move.y += 1;
-	}
-
-	for(var i = 0, l = res.length; i < l; ++i){
-		res[i].uppercut = res[i].punch && res[i].move.y < -0.5;
-		res[i].punch = res[i].punch && !res[i].uppercut;
-
-		res[i].move.x = clamp(-1.0, res[i].move.x, 1.0);
-		res[i].move.y = clamp(-1.0, res[i].move.y, 1.0);
-	}
-
-	return res;
 }
 
 function getBorderTex(__rect, __invert){
