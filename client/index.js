@@ -162,6 +162,9 @@ ready(function(){
 	CustomFilter.prototype.constructor = CustomFilter;
 
 	var videos = [
+		["evil",1],
+		["cult",1],
+		["chef",0]
 	];
 
 	var images = [
@@ -193,10 +196,12 @@ ready(function(){
 		PIXI.loader.add(images[i],'assets/img/'+images[i]+'.jpg');
 	}
 	for(var i = 0; i < videos.length; ++i){
-		PIXI.loader.add(videos[i],'assets/video/'+videos[i]+'.mp4',{
+		var v = videos[i];
+		PIXI.loader.add(v[0],'assets/video/'+v[0]+'.mp4',{
 			loadType: PIXI.loaders.Resource.LOAD_TYPE.VIDEO,
 			metadata: {
-				screenMode: 1
+				screenMode: v[1],
+				layer: 1
 			}
 		});
 	}
