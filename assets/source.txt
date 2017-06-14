@@ -9,6 +9,7 @@ NAME OF THE GAME
 
 [[Start]]
 [[Options]]
+[[About]]
 
 ::Options
 Palette:      [[CGA0|this.setPalette(0);]]   [[CGA1|this.setPalette(1);]]
@@ -16,6 +17,8 @@ Scaling:      [[1:1|scaleMode=2;_resize();]]   [[scale-to-fit|scaleMode=1;_resiz
 Fullscreen:  [[toggle|renderer.view.toggleFullscreen = true;]]
 [[back|this.back()]]
 
+::About
+Made by Ian, Sean & Michael for [[#CGAJAM|window.open('https://itch.io/jam/cga-jam')]] with [[Pixi.js|window.open('http://www.pixijs.com/')]].
 [[back|this.back()]]
 
 ::Start
