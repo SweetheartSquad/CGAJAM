@@ -711,10 +711,15 @@ function parsePassage(__source) {
 			}
 		}else{
 			// link
-			var link = __source[i].split('|');
+			var link = __source[i].split(/(.*?)\|(.*)/);
+			if (link.length === 1) {
+				link[1] = 'this.goto("'+link[0]+'");';
+			} else {
+				link = link.slice(1,3);
+			}
 			words.push({
-				link: link[1] || 'this.goto("'+link[0]+'");',
-				text: link[0]
+				text: link[0],
+				link: link[1]
 			});
 		}
 	}
