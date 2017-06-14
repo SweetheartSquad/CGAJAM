@@ -542,7 +542,7 @@ Game.prototype.displayPassage = function(__newPassage){
 		}
 		// re-center text
 		video.passageContainer.x = Math.floor(size.x/2 - textWidth/2);
-		video.passageContainer.y = Math.floor(size.y/4 - video.passageContainer.height/2);
+		video.passageContainer.y = Math.floor(size.y*3/4 - video.passageContainer.height/2);
 	}
 	return;
 };
