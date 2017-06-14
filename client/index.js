@@ -185,12 +185,6 @@ ready(function(){
 		.add('source','assets/source.txt')
 		.add('cursor','assets/cursor.png')
 		.add('vert','assets/passthrough.vert')
-		.add('vid','assets/Converge/ezgif.com-gif-to-mp4.mp4', {
-			loadType: PIXI.loaders.Resource.LOAD_TYPE.VIDEO
-		})
-		.add('vid2','assets/20170610_212031_1.mp4', {
-			loadType: PIXI.loaders.Resource.LOAD_TYPE.VIDEO
-		})
 		.add('screen_shader','assets/screen_shader.frag')
 		.add('greenScreen_shader','assets/greenScreen_shader.frag');
 
