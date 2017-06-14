@@ -5,7 +5,7 @@ This page shows up when a passage failed to parse, or doesn't even exist. Try ch
 [[back|this.back();]]
 
 ::START
-NAME OF THE GAME
+A Visitor on Venus
 
 [[Start]]
 [[Options]]
