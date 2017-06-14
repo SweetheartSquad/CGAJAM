@@ -160,24 +160,51 @@ ready(function(){
 
 	CustomFilter.prototype = Object.create(PIXI.Filter.prototype);
 	CustomFilter.prototype.constructor = CustomFilter;
+
+	var videos = [
+		["evil",1],
+		["cult",1],
+		["chef",0]
+	];
+
+	var images = [
+		'bedroom',
+		'chair wall',
+		'chairs',
+		'chairs2',
+		'courtyard esque',
+		'dining room',
+		'drawer',
+		'garden',
+		'garden2',
+		'hallway',
+		'hallway2',
+		'kitchen',
+		'kitchen2',
+		'screen',
+		'sitting room'
+	];
 	PIXI.loader
 		.add('source','assets/source.txt')
 		.add('cursor','assets/cursor.png')
 		.add('vert','assets/passthrough.vert')
-		.add('bg','assets/1453-render_1040.png')
-		.add('ship','assets/ship.png')
-		.add('ship2','assets/ship2.png')
-		.add('ship3','assets/ship3.png')
-		.add('lab','assets/20170608_192715 (1).jpg')
-		.add('mansion','assets/mansion.png')
-		.add('vid','assets/Converge/ezgif.com-gif-to-mp4.mp4', {
-			loadType: PIXI.loaders.Resource.LOAD_TYPE.VIDEO
-		})
-		.add('vid2','assets/20170610_212031_1.mp4', {
-			loadType: PIXI.loaders.Resource.LOAD_TYPE.VIDEO
-		})
 		.add('screen_shader','assets/screen_shader.frag')
 		.add('greenScreen_shader','assets/greenScreen_shader.frag');
+
+
+	for(var i = 0; i < images.length; ++i){
+		PIXI.loader.add(images[i],'assets/img/'+images[i]+'.jpg');
+	}
+	for(var i = 0; i < videos.length; ++i){
+		var v = videos[i];
+		PIXI.loader.add(v[0],'assets/video/'+v[0]+'.mp4',{
+			loadType: PIXI.loaders.Resource.LOAD_TYPE.VIDEO,
+			metadata: {
+				screenMode: v[1],
+				layer: 1
+			}
+		});
+	}
 
 	PIXI.loader
 		.on('progress', loadProgressHandler)

@@ -5,36 +5,23 @@ This page shows up when a passage failed to parse, or doesn't even exist. Try ch
 [[back|this.back();]]
 
 ::START
-This is the start menu
+NAME OF THE GAME
 
-[[start|this.goto('INTRO');]]
-[[options|this.goto('OPTIONS');]]
-[[api test|this.goto('API TEST');]]
+[[Start]]
+[[Options]]
+[[About]]
 
-::OPTIONS
-Palette: [[CGA0|this.enableShader();this.setPalette(0);]] [[CGA1|this.enableShader();this.setPalette(1);]] [[N/A|this.disableShader();]]
-Scaling: [[1:1|scaleMode=2;_resize();]] [[scale-to-fit|scaleMode=1;_resize();]] [[scale-in-multiples|scaleMode=0;_resize();]]
-Fullscreen: [[toggle|renderer.view.toggleFullscreen = true;]]
+::Options
+Palette:      [[CGA0|this.setPalette(0);]]   [[CGA1|this.setPalette(1);]]
+Scaling:      [[1:1|scaleMode=2;_resize();]]   [[scale-to-fit|scaleMode=1;_resize();]]   [[scale-in-multiples|scaleMode=0;_resize();]]
+Fullscreen:  [[toggle|renderer.view.toggleFullscreen = true;]]
+[[back|(this.shouldShowVideo ? this.showVideo() : Promise.resolve()).then(this.back.bind(this))]]
+
+::About
+Made by Ian, Sean & Michael for [[#CGAJAM|window.open('https://itch.io/jam/cga-jam')]] with [[Pixi.js|window.open('http://www.pixijs.com/')]].
 [[back|this.back()]]
 
-::API TEST
-API TEST
-[[showVideo|this.showVideo();]]
-[[hideVideo|this.hideVideo();]]
-[[Random background|var a=['mansion','bg','ship','ship2','ship3'];this.setBg(a[Math.floor(Math.random()*a.length)]);]]
-[[goto|this.goto('GOTO TEST');]]
-[[back|this.back()]]
-
-::GOTO TEST
-GOTO TEST
-[[back|this.back()]]
-
-
-::VIDEO TEST
-Nice ship, it would be such a shame if something were to... happen to it.
-
-
-::INTRO
+::Start
 Of course everything is going wrong on your vacation. You get away from the base for a five day getaway in the historic foothills of Charon and you're one day behind, two suitcases short, and three hundred thousand miles from the bed and breakfast you booked. You're only just now passing [[Venus]].
 
 
@@ -118,8 +105,7 @@ You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stand
 [[Go left|this.goto('dining room')]]
 [[Go right|this.goto('sitting room')]]
 [[Go upstairs|this.goto('upstairs hallway')]]
-(this.ardanthium && this.band && this.toolbox){[[Go outside|this.goto(‘ending start’)]]}
-(!this.ardanthium || !this.band || !this.toolbox){[[Go outside|this.goto(‘grounds2’)]]}
+(this.ardanthium && this.band && this.toolbox){[[Go outside|this.goto('ending start')]]}
 
 
 ::grounds2
@@ -133,17 +119,17 @@ You stand on the gravel pathway in front of the mansion. Arrangements of trees a
 You enter a lavish dining room. Fifteen chairs sit at an enormous table. Video screens hang like paintings around the room, each showing clips of Cairo McVeigh posing, interacting with the public, and performing outstanding feats.
 
 [[Go to the kitchen|this.goto('kitchen')]]
-[[Go to the foyer|this.goto(‘foyer’)]]
+[[Go to the foyer|this.goto('foyer')]]
 
 
 ::kitchen
 The kitchen is big, but not as dramatic as the rest of the rooms. It's clearly sizeable enough to prepare a banquet, but nothing is ostentatious. It's a functional room.
 
-(!this.chefdone){A [[chef]] is chopping vegetables nearby. }
+(!this.chefdone){A [[chef|this.setVideo('chef').then(this.goto.bind(this,'chef'))]] is chopping vegetables nearby. }
 (this.chefdone){A chef is chopping vegetables nearby. }
 There are a large number of [[kitchen utensils]] on the countertops.
 
-[[Go back to the dining room|this.goto(‘dining room’)]].
+[[Go back to the dining room|this.goto('dining room')]].
 
 
 ::chef
@@ -156,7 +142,7 @@ There are a large number of [[kitchen utensils]] on the countertops.
 ::chef oh
 "Oh! Uh... what are you doing here? Am I in trouble?"
 
-[[I crashed my ship nearby and I need to make repairs.|this.goto('chef stuff')]]
+[[I crashed nearby and need repairs.|this.goto('chef stuff')]]
 [[Why would you be in trouble?|this.goto('chef nervous')]]
 
 
@@ -169,7 +155,7 @@ There are a large number of [[kitchen utensils]] on the countertops.
 ::chef stuff
 (this.chefdone=true){}"I don't know much about most of those things. If you need to make a new ardanthium conduit, though, all my utensils are made out of ardanthium. You could probably use a set of tongs or something!"
 
-[[Thank you!|this.goto('kitchen')]]
+[[Thank you!|this.hideVideo().then(this.goto.bind(this,'kitchen'))]]
 
 
 ::kitchen utensils
@@ -189,14 +175,14 @@ Save for a few plants and video screens, there's not much to see or do.
 
 Through a set of glass doors there is a beautiful garden.
 
-[[Go to the garden|this.goto(‘garden’)]]
-[[Go to the foyer|this.goto(‘foyer’)]]
+[[Go to the garden|this.goto('garden')]]
+[[Go to the foyer|this.goto('foyer')]]
 
 
 ::garden
 The garden is just as lush as the grounds in the front of the mansion, but contained by a fence. There is a large white tent with a podium and a few chairs inside.
 
-(!this.toolbox){A [[person in a black robe]] mills about nearby.}
+(!this.toolbox){A [[person in a black robe|this.setVideo('cult').then(this.goto.bind(this,'person in a black robe'))]] mills about nearby.}
 (this.toolbox){A person in a sky blue robe mills about nearby.}
 
 [[Go back to the sitting room|this.goto('sitting room')]]
@@ -232,7 +218,7 @@ The garden is just as lush as the grounds in the front of the mansion, but conta
 ::cult goodbye
 "Good luck with your ship!"
 
-[[Goodbye.|this.goto('garden')]]
+[[Goodbye.|this.hideVideo().then(this.goto.bind(this,'garden'))]]
 
 
 ::upstairs hallway
@@ -260,8 +246,10 @@ The closet is immaculate. There is an ironing board and an iron.
 
 
 ::chest of drawers
-(this.jeans){Most of the drawers are full of black robes. There are a few street clothes as well, including t-shirts, underwear, and socks.}
-(!this.jeans{Most of the drawers are full of black robes. There are a few street clothes as well, including t-shirts, underwear, socks, and [[jeans]].}
+Most of the drawers are full of black robes. There are a few street clothes as well, including t-shirts, underwear, (this.jeans){and socks.}
+(!this.jeans){socks, and [[jeans]].}
+
+
 [[Go back|this.back()]]
 
 
@@ -279,7 +267,7 @@ As you go to leave the mansion, though, you hear [[a sound behind you]].
 
 
 ::a sound behind you
-You turn and see a strange man in a fashionable suit. He looks familiar to you, but you can't quite place him. [[He gestures toward you]].
+You turn and see a strange man in a fashionable suit. He looks familiar to you, but you can't quite place him. [[He gestures toward you|this.setVideo('evil').then(this.goto.bind(this,'He gestures toward you'))]].
 
 
 ::He gestures toward you
@@ -298,14 +286,14 @@ You turn and see a strange man in a fashionable suit. He looks familiar to you, 
 ::cairo why
 "Ah, yes! I was just about to get to that. Adrian, please collect our guest!"
 
-Someone grabs you from behind and shoves [[a bag over your head]].
+Someone grabs you from behind and shoves [[a bag over your head|this.hideVideo().then(this.goto.bind(this,'a bag over your head'))]].
 
 
 ::a bag over your head
 You wake up and find yourself tied to a chair in the dining room. Cairo McVeigh paces back and forth before you, muttering.
 
-[[Hello?|this.goto('cairo hello')]]
-[[What's going on??|this.goto('cairo hello')]]
+[[Hello?|this.setVideo('evil').then(this.goto.bind(this,'cairo hello'))]]
+[[What's going on??|this.setVideo('evil').then(this.goto.bind(this,'cairo hello'))]]
 
 
 ::cairo hello
@@ -319,82 +307,82 @@ You wake up and find yourself tied to a chair in the dining room. Cairo McVeigh 
 "Please, just listen to me. I don't want to hurt you. I just need you to help me."
 
 [[With what?|this.goto('cairo pitch')]]
-[[Let me go!!|this.goto('cairo no')]]
+[[Let me go!!|this.goto('cairo pitch')//TODO: put another passage here?]]
 
 
 ::cairo pitch
 "In my mind, I saw it. It was beautiful... It was the finest scenic getaway and spa this side of the Milky Way! At least, that's what the ads were supposed to say."
 
-[[Ads?|cairo ad]]
-[[Let me go!!!|cairo ad]]
+[[Ads?|this.goto('cairo ad')]]
+[[Let me go!!!|this.goto('cairo ad')]]
 
 
 ::cairo ad
 "I blew my whole budget on this ad campaign, but those fiends just ran off with my money and never published a single ad. Now no one will come here! And Sneed is going around spreading rumours that I run some sort of cult... it's killing me!"
 
-[[The black robes are very culty.|cairo robes]]
-[[Who took your money?|cairo money]]
+[[The black robes are very culty.|this.goto('cairo robes')]]
+[[Who took your money?|this.goto('cairo money')]]
 
 
 ::cairo robes
 "I wanted blue bathrobes. They gave me black cloaks instead. Horrid! They said was some sort of manufacturing mistake... Likely story. Animals! Charlatans!"
 
-[[Who are you talking about?|cairo money]]
+[[Who are you talking about?|this.goto('cairo money')]]
 
 
 ::cairo money
 "Advantage Image Consulting. They're crooks! They swindled me out of my fortune. They said they would take care of everything. They said they would help me make this place the ultimate getaway! But now it's just me and my staff, living off the land, hoping for a customer. Any customer. Stupid. So, so stupid."
 
-[[So why kidnap me?|cairo kidnap]]
+[[So why kidnap me?|this.goto('cairo kidnap')]]
 
 
 ::cairo kidnap
 "Oh dear, right! Ugh... I'm sorry to have kidnapped you. That was unnecessary. I'm just... goodness. This whole thing is a mess. A horrible, horrible mess..."
 
-[[Can I go now?|cairo need]]
+[[Can I go now?|this.goto('cairo need')]]
 
 
 ::cairo need
 "No... you can't leave. You need to help me! Just... stay for a few days. Leave a review. A bad review, even! I just need to prove that this resort exists. It won't cost you a thing."
 
-[[Uh, okay.|stay ending]]
-[[No!!!!|go ending]]
+[[Uh, okay.|this.goto('stay ending')]]
+[[No!!!!|this.goto('go ending')]]
 
 
 ::stay ending
-“Oh god, thank you. Thank you thank you thank you. You won't regret this. I'll have my staff repair your ship and fix you a room.” 
+"Oh god, thank you. Thank you thank you thank you. You won't regret this. I'll have my staff repair your ship and fix you a room." 
 
-[[Okay.|this.goto(‘stay2’)]]
+[[Okay.|this.hideVideo().then(this.goto.bind(this,'stay2'))]]
 
 
 ::stay2
-Cairo unties you and leads you into the foyer. Several robed figures usher you up the stairs to one of the guest rooms. After you settle in, another robed figure enters your room with a lavish spread of hors d'oeuvres and a massage table. Hey, now. This isn't so bad. Maybe after enough massages you'll leave the kidnapping out of your [[Yelp review|this.goto(‘stay3’)]].
+Cairo unties you and leads you into the foyer. Several robed figures usher you up the stairs to one of the guest rooms. After you settle in, another robed figure enters your room with a lavish spread of hors d'oeuvres and a massage table. Hey, now. This isn't so bad. Maybe after enough massages you'll leave the kidnapping out of your [[Yelp review|this.goto('stay3')]].
 
 
 ::stay3
-As for your Cheron package, well... it's probably too late for a refund, and if you're being completely honest, it was going to be too crowded and you were going to be miserable drinking your watery cocktails by the dirty poolside, and you'd try desperately to pretend that being on vacation was better than being at work just because you paid through the nose for it. And hey, a robed figure just came into your room with a pitcher of margaritas, so, to hell with it. A Venus vacation it is.
+As for your Charon package, well... it's probably too late for a refund, and if you're being completely honest, it was going to be too crowded and you were going to be miserable drinking your watery cocktails by the dirty poolside, and you'd try desperately to pretend that being on vacation was better than being at work just because you paid through the nose for it. And hey, a robed figure just came into your room with a pitcher of margaritas, so, to hell with it. A Venus vacation it is.
 
 
 
 
 ::go ending
-“I… uh... well... I did kidnap you, I suppose. That's fair.”
+"I... uh... well... I did kidnap you, I suppose. That's fair."
 
-[[Yeah.|this.goto(‘go2’)]]
+[[Yeah.|this.goto('go2')]]
 
 
 ::go2
-“Er... okay. You can go. But please just... mention I have a spa here. To somebody. Anybody. I just want people to know it's here. It would mean the world to me.”
+"Er... okay. You can go. But please just... mention I have a spa here. To somebody. Anybody. I just want people to know it's here. It would mean the world to me."
 
-[[Yes.|this.goto(‘go3’)]]
-[[No.|this.goto(‘go3’)]]
-[[Maybe.|this.goto(‘go3’)]]
+[[Yes.|this.hideVideo().then(this.goto.bind(this,'go3'))]]
+[[No.|this.hideVideo().then(this.goto.bind(this,'go3'))]]
+[[Maybe.|this.hideVideo().then(this.goto.bind(this,'go3'))]]
 
 ::go3
-Cairo unties you. You rush out of the estate and get to your ship. As you repair your ship, you decide to extend your Cheron getaway. A few days, maybe. A few weeks. Whatever it takes to forget that you ever had the [[misfortune|this.goto(‘go4’)]] of crash-landing on Venus.
+Cairo unties you. You rush out of the estate and get to your ship. As you repair your ship, you decide to extend your Charon getaway. A few days, maybe. A few weeks. Whatever it takes to forget that you ever had the [[misfortune|this.goto('go4')]] of crash-landing on Venus.
 
 ::go4
-Before you leave the planet's surface, you leave a Yelp review for McVeigh's spa. It's heavy on the kidnapping aspect, but it does mention the gorgeous grounds and facilities. You give the experience two our of five stars.
+Before you leave the planet's surface, you leave a Yelp review for McVeigh's spa. It's heavy on the kidnapping aspect, but it does mention the gorgeous grounds and facilities. You give the experience two out of five stars.
 
 
 

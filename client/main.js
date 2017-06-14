@@ -13,7 +13,7 @@ function main(){
 }
 
 offWhite = rgbToHex(1.0*255, 0.95*255, 0.95*255);
-linkHover = rgbToHex(120,120,120);
+linkHover = rgbToHex(150,150,150);
 linkNormal = rgbToHex(0.92*255,0.92*255,255);
 
 border = {
@@ -51,6 +51,7 @@ function init(){
 	// setup greenscreen filter
 	greenScreen_filter = new CustomFilter(PIXI.loader.resources.vert.data, PIXI.loader.resources.greenScreen_shader.data);
 	greenScreen_filter.padding = 0;
+	greenScreen_filter.uniforms["uScreenMode"] = 0;
 	
 	// setup rendersprite filter
 	renderSprite.filterArea = new PIXI.Rectangle(0,0,size.x,size.y);
@@ -66,7 +67,7 @@ function init(){
 		border:null
 	};
 
-	bg = new PIXI.Sprite(PIXI.loader.resources.ship.texture);
+	bg = new PIXI.Sprite(emptyTexture);
 	bg.width = size.x;
 	bg.height = size.y;
 	{
@@ -104,7 +105,7 @@ function init(){
 	}
 
 	// video bg
-	video.bg = new PIXI.Sprite(PIXI.loader.resources.ship.texture);
+	video.bg = new PIXI.Sprite(emptyTexture);
 	video.bg.width = size.x;
 	video.bg.height = size.y;
 
@@ -120,11 +121,6 @@ function init(){
 			}
 		}
 	}
-	video.currentPassage = {
-		text:[],
-		links:[],
-		title:null
-	};
 	video.texture = new PIXI.Texture(emptyTexture.baseTexture);
 	video.sprite = new PIXI.Sprite(video.texture);
 	video.sprite.filters = [greenScreen_filter];
@@ -173,6 +169,7 @@ function init(){
 	}
 	game.addChild(video.container);
 
+	// mouse stuff
 	mouseSprite3 = new PIXI.Sprite(PIXI.loader.resources.cursor.texture);
 	game.addChild(mouseSprite3);
 	mouseSprite3.alpha = 0.4;
@@ -185,14 +182,17 @@ function init(){
 
 	// parse source
 	passages = parseSource(PIXI.loader.resources.source.data);
+
+	// hide game to start
+	game.alpha = 0;
+
 	// create game and goto starting passage
 	api = new Game();
-
 	var p = screen_filter.uniforms["palette"];
-	game.alpha = 0;
 	screen_filter.uniforms["palette"] = screen_filter.uniforms["palette"] ? 0 : 1;
-	api.eval('this.setPalette('+p+');')
-	.then(api.eval.bind(api,'this.goto("START");'));
+	api.eval('this.setPalette('+p+');') // sets the initial palette
+	.then(api.eval.bind(api,'this.goto("START");')) // sets the initial passage
+	.then(api.eval.bind(api,'this.setBg("garden");')); // sets the initial background
 
 	// start the main loop
 	main();
@@ -208,9 +208,7 @@ function onResize() {
 function update(){
 	// game update
 
-
-	var inputs = getInputs();
-
+	// TODO: remove these debug controls
 	if(keys.isJustDown(keys.A)){
 		api.eval('api.showVideo();');
 	}
@@ -218,32 +216,10 @@ function update(){
 		api.eval('api.hideVideo();');
 	}
 
-	if(keys.isJustDown(keys.B)){
-		api.eval('api.setBg("ship");');
-	}
-	if(keys.isJustDown(keys.M)){
-		api.eval('api.setBg("ship2");');
-	}
-	if(keys.isJustDown(keys.V)){
-		api.eval('api.setBg("ship3");');
-	}
-	if(keys.isJustDown(keys.N)){
-		api.eval('api.setBg("bg");');
-	}
-	if(keys.isJustDown(keys.C)){
-		api.eval('api.setBg("mansion");');
-	}
-	if(keys.isJustDown(keys.X)){
-		api.eval('api.setBg("lab");');
-	}
-	if(keys.isJustDown(keys.F)){
-		renderer.view.toggleFullscreen = true;
-	}
-
 	// copy of current passage links
 	// (don't use them directly since they may change on click)
 	var links = [];
-	var activePassage = (api.video > 0 ? video : api).currentPassage;
+	var activePassage = api.currentPassage;
 	if(activePassage){
 		var activeLinks = activePassage.links;
 		for(var i = 0; i < activeLinks.length; ++i){
@@ -270,6 +246,19 @@ function update(){
 		}
 	}
 
+	// key handling
+	if(keys.isJustDown(keys.ESCAPE)){
+		if(!activePassage || activePassage.title !== 'Options') {
+			api.eval('this.shouldShowVideo=this.video;this.hideVideo().then(this.goto.bind(this,"Options"));');
+		} else {
+			api.eval('(this.shouldShowVideo ? this.showVideo() : Promise.resolve()).then(this.back.bind(this))');
+		}
+	}
+	if(keys.isJustDown(keys.F)){
+		renderer.view.toggleFullscreen = true;
+	}
+
+	// animation update
 	var alphaAnimation = [
 		{
 			obj:video.container,
@@ -329,65 +318,6 @@ function render(){
 	greenScreen_filter.uniforms["uBufferSize"] = [nextPowerOfTwo(video.sprite.width),nextPowerOfTwo(video.sprite.height)];
 	renderer.render(game,renderTexture,true,false);
 	renderer.render(renderSprite,null,true,false);
-}
-
-
-
-function getInputs(){
-	var res = [
-		{
-			move: {
-				x: gamepads.getAxis(gamepads.LSTICK_H),
-				y: gamepads.getAxis(gamepads.LSTICK_V)
-			},
-			punch:
-				gamepads.isJustDown(gamepads.LB) ||
-				gamepads.isJustDown(gamepads.LT) ||
-				keys.isJustDown(keys.Q),
-			uppercut: false
-		},
-		{
-			move: {
-				x: gamepads.getAxis(gamepads.RSTICK_H),
-				y: gamepads.getAxis(gamepads.RSTICK_V)
-			},
-			punch:
-				gamepads.isJustDown(gamepads.RB) ||
-				gamepads.isJustDown(gamepads.RT) ||
-				keys.isJustDown(keys.U),
-			uppercut: false
-		}
-	];
-
-	if(keys.isDown(keys.A) || keys.isDown(keys.LEFT) || gamepads.isDown(gamepads.DPAD_LEFT)){
-		res[0].move.x -= 1;
-	}if(keys.isDown(keys.D) || keys.isDown(keys.RIGHT) || gamepads.isDown(gamepads.DPAD_RIGHT)){
-		res[0].move.x += 1;
-	}if(keys.isDown(keys.W) || keys.isDown(keys.UP) || gamepads.isDown(gamepads.DPAD_UP)){
-		res[0].move.y -= 1;
-	}if(keys.isDown(keys.S) || keys.isDown(keys.DOWN) || gamepads.isDown(gamepads.DPAD_DOWN)){
-		res[0].move.y += 1;
-	}
-
-	if(keys.isDown(keys.J)/* || keys.isDown(keys.LEFT)*/ || gamepads.isDown(gamepads.X)){
-		res[1].move.x -= 1;
-	}if(keys.isDown(keys.L)/* || keys.isDown(keys.RIGHT)*/ || gamepads.isDown(gamepads.B)){
-		res[1].move.x += 1;
-	}if(keys.isDown(keys.I)/* || keys.isDown(keys.UP)*/ || gamepads.isDown(gamepads.Y)){
-		res[1].move.y -= 1;
-	}if(keys.isDown(keys.K)/* || keys.isDown(keys.DOWN)*/ || gamepads.isDown(gamepads.A)){
-		res[1].move.y += 1;
-	}
-
-	for(var i = 0, l = res.length; i < l; ++i){
-		res[i].uppercut = res[i].punch && res[i].move.y < -0.5;
-		res[i].punch = res[i].punch && !res[i].uppercut;
-
-		res[i].move.x = clamp(-1.0, res[i].move.x, 1.0);
-		res[i].move.y = clamp(-1.0, res[i].move.y, 1.0);
-	}
-
-	return res;
 }
 
 function getBorderTex(__rect, __invert){
@@ -558,20 +488,18 @@ Game.prototype.displayPassage = function(__newPassage){
 	}
 
 	// history
-	var p = this.video ? video.currentPassage : this.currentPassage;
-	if(p && p.title){
-		this.history.push(p.title);
+	if(this.currentPassage && this.currentPassage.title){
+		this.history.push(this.currentPassage.title);
 	}else{
-		console.warn('History skipped because passage has no title:',p);
+		console.warn('History skipped because passage has no title:',this.currentPassage);
 	}
-	this.currentPassage = null;
-	video.currentPassage = null;
+
+	// parse requested passage
+	var textWidth = this.video ? size.x/2.2 : size.x/2;
+	this.currentPassage = passageToText(__newPassage, textWidth);
+	this.currentPassage.title = __newPassage.title;
 
 	if(!this.video) {
-		// parse requested passage
-		this.currentPassage = passageToText(__newPassage, size.x/2);
-		this.currentPassage.title = __newPassage.title;
-
 		// add parsed passage
 		for(var i = 0; i < this.currentPassage.text.length; ++i){
 			textContainer.addChild(this.currentPassage.text[i]);
@@ -579,11 +507,6 @@ Game.prototype.displayPassage = function(__newPassage){
 		// re-center text
 		textContainer.y = size.y*3/4 - textContainer.height/2;
 	}else{
-		var textWidth = size.x/3;
-		// parse requested passage
-		video.currentPassage = passageToText(__newPassage, textWidth);
-		video.currentPassage.title = __newPassage.title;
-
 		// bg
 		if(video.passageContainer.bg){
 			video.passageContainer.removeChild(video.passageContainer.bg);
@@ -601,8 +524,8 @@ Game.prototype.displayPassage = function(__newPassage){
 
 
 		// add parsed passage
-		for(var i = 0; i < video.currentPassage.text.length; ++i){
-			video.passageContainer.textContainer.addChild(video.currentPassage.text[i]);
+		for(var i = 0; i < this.currentPassage.text.length; ++i){
+			video.passageContainer.textContainer.addChild(this.currentPassage.text[i]);
 		}
 		video.passageContainer.bg.height = video.passageContainer.textContainer.height + border.outer*2;
 		video.passageContainer.bg.width = textWidth + border.outer*2;
@@ -618,7 +541,7 @@ Game.prototype.displayPassage = function(__newPassage){
 		}
 		// re-center text
 		video.passageContainer.x = Math.floor(size.x/2 - textWidth/2);
-		video.passageContainer.y = Math.floor(size.y/4 - video.passageContainer.height/2);
+		video.passageContainer.y = Math.floor(size.y*3/4 - video.passageContainer.height/2);
 	}
 	return;
 };
@@ -743,7 +666,7 @@ function parseConditionals(__source) {
 function parseLinks(__source) {
 	// break out links (links are inside double square brackets, i.e. [[link]] )
 	// result will be an array in format [plain-text,whitespace,link, plain-text,whitespace,link, ...]
-	regexSource = /(\s)*?\[{2}(.*?)\]{2}/g;
+	regexSource = /(\s)?\[{2}(.*?)\]{2}/g;
 	return __source.split(regexSource);
 }
 
@@ -772,10 +695,15 @@ function parsePassage(__source) {
 			}
 		}else{
 			// link
-			var link = __source[i].split('|');
+			var link = __source[i].split(/(.*?)\|(.*)/);
+			if (link.length === 1) {
+				link[1] = 'this.goto("'+link[0]+'");';
+			} else {
+				link = link.slice(1,3);
+			}
 			words.push({
-				link: link[1] || 'this.goto("'+link[0]+'");',
-				text: link[0]
+				text: link[0],
+				link: link[1]
 			});
 		}
 	}
