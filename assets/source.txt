@@ -289,7 +289,7 @@ You turn and see a strange man in a fashionable suit. He looks familiar to you, 
 ::cairo why
 "Ah, yes! I was just about to get to that. Adrian, please collect our guest!"
 
-Someone grabs you from behind and shoves [[a bag over your head|this.hideVideo().then(this.goto.bind(this,'a bag over your head'))]].
+Someone grabs you from behind and shoves [[a bag over your head|this.hideVideo().then(this.setBg.bind(this, 'dining room')).then(this.goto.bind(this,'a bag over your head'))]].
 
 
 ::a bag over your head
@@ -355,7 +355,7 @@ You wake up and find yourself tied to a chair in the dining room. Cairo McVeigh 
 ::stay ending
 "Oh god, thank you. Thank you thank you thank you. You won't regret this. I'll have my staff repair your ship and fix you a room."
 
-[[Okay.|this.hideVideo().then(this.goto.bind(this,'stay2'))]]
+[[Okay.|this.hideVideo().then(this.setBg.bind(this, 'foyer1')).then(this.goto.bind(this,'stay2'))]]
 
 
 ::stay2
@@ -377,16 +377,15 @@ As for your Charon package, well... it's probably too late for a refund, and if 
 ::go2
 "Er... okay. You can go. But please just... mention I have a spa here. To somebody. Anybody. I just want people to know it's here. It would mean the world to me."
 
-[[Yes.|this.hideVideo().then(this.yesend=true;this.goto.bind(this,'go3'))]]
-[[No.|this.hideVideo().then(this.noend=true;this.goto.bind(this,'go3'))]]
-[[Maybe.|this.hideVideo().then(this.maybeend=true;this.goto.bind(this,'go3'))]]
+[[Yes.|this.hideVideo().then(function {this.yesend=true}.bind(this)).then(this.goto.bind(this,'go3'))]]
+[[No.|this.hideVideo().then(function {this.noend=true}.bind(this)).then(this.noend=true;this.goto.bind(this,'go3'))]]
+[[Maybe.|this.hideVideo().then(function {this.maybeend=true}.bind(this)).then(this.maybeend=true;this.goto.bind(this,'go3'))]]
 
 ::go3
-Cairo unties you. You rush out of the estate and get to your ship. As you repair your ship, you decide to extend your Charon getaway. A few days, maybe. A few weeks. Whatever it takes to forget that you ever had the [[misfortune|this.goto('go4')]] of crash-landing on Venus.
+Cairo unties you. You rush out of the estate and get to your ship. As you repair your ship, you decide to extend your Charon getaway. A few days, maybe. A few weeks. Whatever it takes to forget that you ever had the [[misfortune|this.setBg('space').then(this.goto.bind(this, 'go4'))]] of crash-landing on Venus.
 
 ::go4
-
-(this.yesend){Before you leave the planet's surface, you leave a Yelp review for McVeigh's spa. It's heavy on the kidnapping aspect, but it does mention the gorgeous grounds and facilities. You give the experience two out of five stars.}
+(this.yesend){After you reach cruising altitude, you leave a Yelp review for McVeigh's spa. It's heavy on the kidnapping aspect, but it does mention the gorgeous grounds and facilities. You give the experience two out of five stars.}
 (this.noend){As you fly away, you look down at McVeigh's doomed resort. It's a tragic tale, and one you won't soon forget. Well, maybe after a couple margaritas.}
 (this.maybeend){You consider leaving a Yelp review, but it just doesn't seem worth it. You probably weren't even going to leave one for the bed and breakfast on Charon. You take off in your ship and hope you never land on Venus again.}
 
