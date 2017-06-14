@@ -51,6 +51,7 @@ function init(){
 	// setup greenscreen filter
 	greenScreen_filter = new CustomFilter(PIXI.loader.resources.vert.data, PIXI.loader.resources.greenScreen_shader.data);
 	greenScreen_filter.padding = 0;
+	greenScreen_filter.uniforms["uScreenMode"] = 0;
 	
 	// setup rendersprite filter
 	renderSprite.filterArea = new PIXI.Rectangle(0,0,size.x,size.y);
