@@ -208,14 +208,6 @@ function onResize() {
 function update(){
 	// game update
 
-	// TODO: remove these debug controls
-	if(keys.isJustDown(keys.A)){
-		api.eval('api.showVideo();');
-	}
-	if(keys.isJustDown(keys.S)){
-		api.eval('api.hideVideo();');
-	}
-
 	// copy of current passage links
 	// (don't use them directly since they may change on click)
 	var links = [];
