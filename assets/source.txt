@@ -80,7 +80,6 @@ To repair your ship, you need to find a toolbox, an engine band, and a range emi
 The estate is unbelievable. It looks more like a small town. This must belong to Cairo McVeigh. Rumour has it that he never leaves his estate, so you're sure you can catch him. Whether he'll help a poor schmuck like you might be another issue. 
 
 [[Go to the estate|this.goto('estate')]]
-[[Go back to your ship|this.goto('around these parts')]]
 
 
 ::estate
@@ -89,7 +88,6 @@ You walk along a dirt pathway that leads to the foot of the mountain. A single s
 Finally, you reach the front gate. Beyond the bars you can see a lush courtyard, filled with fountains, trees, and gravel pathways. Next to the gate is a video screen and what you assume is a doorbell. A gatebell. Whatever.
 
 [[Ring the bell|this.goto('bell')]]
-[[Go back to your ship|this.goto('around these parts')]]
 
 
 ::bell
@@ -121,7 +119,7 @@ You enter the foyer of McVeigh's mansion. A questionably tasteful fountain stand
 [[Go right|this.goto('sitting room')]]
 [[Go upstairs|this.goto('upstairs hallway')]]
 (this.ardanthium && this.band && this.toolbox){[[Go outside|this.goto(‘ending start’)]]}
-(!this.ardanthium || !this.band || !this.toolbox)){[[Go outside|this.goto(‘grounds2’)]]}
+(!this.ardanthium || !this.band || !this.toolbox){[[Go outside|this.goto(‘grounds2’)]]}
 
 
 ::grounds2
@@ -185,7 +183,7 @@ You sift through the kitchen utensils. (!this.chefdone){You're no kitchen expert
 
 
 ::sitting room
-The sitting room is very modern. It reminds you of a hotel lobby - grand, a little impersonal, and stacks of touchpads on the coffee table.
+The sitting room is very modern. It reminds you of a hotel lobby — impersonal and tasteful.
 
 Save for a few plants and video screens, there's not much to see or do.
 
