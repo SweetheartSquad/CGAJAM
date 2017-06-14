@@ -228,7 +228,7 @@ The garden is just as lush as the grounds in the front of the mansion, but conta
 The upstairs hallway is lightly decorated. There are a number of doors, most of which are locked. There's one unlocked door that seems to lead to a guest bedroom.
 
 [[Go to guest bedroom|this.setBg ('bedroom').then (this.goto.bind (this, 'guest bedroom'))]]
-[[Go back downstairs|this.setBg ('foyer').then (this.goto.bind (this, 'foyer')]]
+[[Go back downstairs|this.setBg ('foyer').then (this.goto.bind (this, 'foyer'))]]
 
 
 ::guest bedroom
