@@ -202,7 +202,7 @@ function onResize() {
 	_resize();
 	screen_filter.uniforms["uScreenSize"] = [size.x,size.y];
 	screen_filter.uniforms["uBufferSize"] = [nextPowerOfTwo(size.x),nextPowerOfTwo(size.y)];
-	console.log('Resized',size,scaleMultiplier,[size.x*scaleMultiplier,size.y*scaleMultiplier]);
+	//console.log('Resized',size,scaleMultiplier,[size.x*scaleMultiplier,size.y*scaleMultiplier]);
 }
 
 function update(){
@@ -386,7 +386,7 @@ Game.prototype.eval = function(__script) {
 
 // API
 Game.prototype.setBg = function(__bg) {
-	console.log('Setting background to:',__bg);
+	//console.log('Setting background to:',__bg);
 	return Promise.all([
 		// fade out
 		fadeOut(bg),
@@ -453,10 +453,10 @@ Game.prototype.disableShader = function(){
 };
 
 Game.prototype.setPalette = function(__palette){
-	console.log('Setting palette:',__palette);
+	//console.log('Setting palette:',__palette);
 
 	if(__palette === screen_filter.uniforms["palette"]) {
-		console.log('Palette already set');
+		//console.log('Palette already set');
 		return Promise.resolve();
 	}
 
@@ -540,7 +540,7 @@ Game.prototype.displayPassage = function(__newPassage){
 
 Game.prototype.goto = function(__passage) {
 	var t = this.video ? video.passageContainer.textContainer : textContainer;
-	console.log('Going to passage:', __passage);
+	//console.log('Going to passage:', __passage);
 	return fadeOut(t)
 	.then(parsePassage.bind(undefined, passages[__passage]))
 	.then(function(__newPassage){
@@ -567,13 +567,13 @@ Game.prototype.back = function() {
 };
 
 Game.onLinkClicked = function(){
-	console.log('Clicked link: ',this.text,'\n','Running: ',this.link);
+	//console.log('Clicked link: ',this.text,'\n','Running: ',this.link);
 	api.eval(this.link);
 };
 
 
 function fadeOut(__obj){
-	console.log('fadeOut: ',__obj);
+	//console.log('fadeOut: ',__obj);
 	return new Promise(function(__resolve, __reject){
 		__obj.targetAlpha = 0;
 		var i = setInterval(function(){
@@ -586,7 +586,7 @@ function fadeOut(__obj){
 	});
 }
 function fadeIn(__obj){
-	console.log('fadeIn: ',__obj);
+	//console.log('fadeIn: ',__obj);
 	return new Promise(function(__resolve, __reject){
 		__obj.targetAlpha = 1;
 		var i = setInterval(function(){
@@ -615,7 +615,7 @@ function parseSource(__source){
 	// remove unneeded \r characters
 	__source = __source.replace(/[\r]/g,'');
 
-	console.log('Parsing source:',__source);
+	//console.log('Parsing source:',__source);
 
 	return parsePassages(__source);
 }
@@ -637,7 +637,7 @@ function parsePassages(__source) {
 		passages[p[i]] = p[i+1];
 	}
 
-	console.log('Parsed passages:',passages);
+	//console.log('Parsed passages:',passages);
 	return passages;
 }
 
@@ -663,15 +663,15 @@ function parseLinks(__source) {
 }
 
 function parsePassage(__source) {
-	console.log('source: ',__source);
+	//console.log('source: ',__source);
 	var s;
 	do{
 		s = __source;
 		__source=parseConditionals(s);
 	}while(s !== __source);
-	console.log('conditioned source:',__source);
+	//console.log('conditioned source:',__source);
 	__source = parseLinks(__source);
-	console.log('linked source:',__source);
+	//console.log('linked source:',__source);
 
 	// create word list
 	// (links are always one "word")
@@ -705,7 +705,7 @@ function parsePassage(__source) {
 			words.splice(i,1);
 		}
 	}
-	console.log('Parsed passage: ',words);
+	//console.log('Parsed passage: ',words);
 	return words;
 }
 
@@ -791,6 +791,6 @@ function passageToText(__passage, __maxWidth) {
 			passage.links.push(passage.text[i]);
 		}
 	}
-	console.log('Converted passage to text: ',passage);
+	//console.log('Converted passage to text: ',passage);
 	return passage;
 }
