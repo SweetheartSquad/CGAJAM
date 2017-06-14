@@ -367,7 +367,7 @@ As for your Cheron package, well... it's probably too late for a refund, and if 
 
 
 ::go ending
-"I… uh... well... I did kidnap you, I suppose. That's fair."
+"I... uh... well... I did kidnap you, I suppose. That's fair."
 
 [[Yeah.|this.goto('go2')]]
 
