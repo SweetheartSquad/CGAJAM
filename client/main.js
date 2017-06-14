@@ -263,6 +263,16 @@ function update(){
 		}
 	}
 
+	// key handling
+	if(keys.isJustDown(keys.ESCAPE)){
+		if(!activePassage || activePassage.title !== 'Options') {
+			api.eval('this.shouldShowVideo=this.video;this.hideVideo().then(this.goto.bind(this,"Options"));');
+		} else {
+			api.eval('(this.shouldShowVideo ? this.showVideo() : Promise.resolve()).then(this.back.bind(this))');
+		}
+	}
+
+	// animation update
 	var alphaAnimation = [
 		{
 			obj:video.container,
