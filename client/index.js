@@ -182,7 +182,16 @@ ready(function(){
 		'kitchen',
 		'kitchen2',
 		'screen',
-		'sitting room'
+		'sitting room',
+		'foyer',
+		'foyer1',
+		'foyer2',
+		'space',
+		'ship',
+		'gate',
+		'grounds',
+		'estate',
+		'garden3'
 	];
 	PIXI.loader
 		.add('source','assets/source.txt')
