@@ -160,6 +160,10 @@ ready(function(){
 
 	CustomFilter.prototype = Object.create(PIXI.Filter.prototype);
 	CustomFilter.prototype.constructor = CustomFilter;
+
+	var videos = [
+	];
+
 	var images = [
 		'bedroom',
 		'chair wall',
@@ -194,6 +198,15 @@ ready(function(){
 	for(var i = 0; i < images.length; ++i){
 		PIXI.loader.add(images[i],'assets/img/'+images[i]+'.jpg');
 	}
+	for(var i = 0; i < videos.length; ++i){
+		PIXI.loader.add(videos[i],'assets/video/'+videos[i]+'.mp4',{
+			loadType: PIXI.loaders.Resource.LOAD_TYPE.VIDEO,
+			metadata: {
+				screenMode: 1
+			}
+		});
+	}
+
 	PIXI.loader
 		.on('progress', loadProgressHandler)
 		.load(function(){
