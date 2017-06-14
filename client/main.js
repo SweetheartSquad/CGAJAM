@@ -67,7 +67,7 @@ function init(){
 		border:null
 	};
 
-	bg = new PIXI.Sprite(PIXI.loader.resources.ship.texture);
+	bg = new PIXI.Sprite(emptyTexture);
 	bg.width = size.x;
 	bg.height = size.y;
 	{
@@ -105,7 +105,7 @@ function init(){
 	}
 
 	// video bg
-	video.bg = new PIXI.Sprite(PIXI.loader.resources.ship.texture);
+	video.bg = new PIXI.Sprite(emptyTexture);
 	video.bg.width = size.x;
 	video.bg.height = size.y;
 
@@ -169,6 +169,7 @@ function init(){
 	}
 	game.addChild(video.container);
 
+	// mouse stuff
 	mouseSprite3 = new PIXI.Sprite(PIXI.loader.resources.cursor.texture);
 	game.addChild(mouseSprite3);
 	mouseSprite3.alpha = 0.4;
@@ -181,14 +182,17 @@ function init(){
 
 	// parse source
 	passages = parseSource(PIXI.loader.resources.source.data);
+
+	// hide game to start
+	game.alpha = 0;
+
 	// create game and goto starting passage
 	api = new Game();
-
 	var p = screen_filter.uniforms["palette"];
-	game.alpha = 0;
 	screen_filter.uniforms["palette"] = screen_filter.uniforms["palette"] ? 0 : 1;
-	api.eval('this.setPalette('+p+');')
-	.then(api.eval.bind(api,'this.goto("START");'));
+	api.eval('this.setPalette('+p+');') // sets the initial palette
+	.then(api.eval.bind(api,'this.goto("START");')) // sets the initial passage
+	.then(api.eval.bind(api,'this.setBg("garden");')); // sets the initial background
 
 	// start the main loop
 	main();
@@ -204,33 +208,12 @@ function onResize() {
 function update(){
 	// game update
 
+	// TODO: remove these debug controls
 	if(keys.isJustDown(keys.A)){
 		api.eval('api.showVideo();');
 	}
 	if(keys.isJustDown(keys.S)){
 		api.eval('api.hideVideo();');
-	}
-
-	if(keys.isJustDown(keys.B)){
-		api.eval('api.setBg("ship");');
-	}
-	if(keys.isJustDown(keys.M)){
-		api.eval('api.setBg("ship2");');
-	}
-	if(keys.isJustDown(keys.V)){
-		api.eval('api.setBg("ship3");');
-	}
-	if(keys.isJustDown(keys.N)){
-		api.eval('api.setBg("bg");');
-	}
-	if(keys.isJustDown(keys.C)){
-		api.eval('api.setBg("mansion");');
-	}
-	if(keys.isJustDown(keys.X)){
-		api.eval('api.setBg("lab");');
-	}
-	if(keys.isJustDown(keys.F)){
-		renderer.view.toggleFullscreen = true;
 	}
 
 	// copy of current passage links
@@ -270,6 +253,9 @@ function update(){
 		} else {
 			api.eval('(this.shouldShowVideo ? this.showVideo() : Promise.resolve()).then(this.back.bind(this))');
 		}
+	}
+	if(keys.isJustDown(keys.F)){
+		renderer.view.toggleFullscreen = true;
 	}
 
 	// animation update

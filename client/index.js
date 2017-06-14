@@ -181,12 +181,6 @@ ready(function(){
 		.add('source','assets/source.txt')
 		.add('cursor','assets/cursor.png')
 		.add('vert','assets/passthrough.vert')
-		.add('bg','assets/1453-render_1040.png')
-		.add('ship','assets/ship.png')
-		.add('ship2','assets/ship2.png')
-		.add('ship3','assets/ship3.png')
-		.add('lab','assets/20170608_192715 (1).jpg')
-		.add('mansion','assets/mansion.png')
 		.add('vid','assets/Converge/ezgif.com-gif-to-mp4.mp4', {
 			loadType: PIXI.loaders.Resource.LOAD_TYPE.VIDEO
 		})
