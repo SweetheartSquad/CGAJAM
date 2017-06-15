@@ -91,8 +91,10 @@ ready(function(){
 	display = document.getElementById('display');
 
 	// create renderer
-	renderer = new PIXI.autoDetectRenderer(size.x, size.y, {
-		antiAlias:false,
+	renderer = new PIXI.WebGLRenderer({
+		width: size.x,
+		height: size.y,
+		antialias:false,
 		transparent:false,
 		resolution:1,
 		roundPixels:true,
