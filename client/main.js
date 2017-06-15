@@ -414,7 +414,17 @@ Game.prototype.setVideo = function(__video) {
 		if(video.baseTexture){
 			video.baseTexture.destroy();
 		}
-		video.baseTexture = PIXI.VideoBaseTexture.fromVideo(video.video);
+		if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+			// hack for firefox: use the fromUrl instead of pre-loaded data
+			video.baseTexture = PIXI.VideoBaseTexture.fromUrl({
+				src: 'assets/video/'+__video+'.mp4',
+				mime: 'video/mp4'
+			});
+			video.baseTexture.source.loop = true;
+		}else{
+			video.baseTexture = PIXI.VideoBaseTexture.fromVideo(video.video);
+		}
+		video.baseTexture.mipmap = false;
 		video.texture.baseTexture = video.baseTexture;
 	})
 	.then(this.showVideo.bind(this));
