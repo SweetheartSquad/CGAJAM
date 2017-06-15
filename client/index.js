@@ -110,7 +110,7 @@ ready(function(){
 	
 	renderer.backgroundColor = 0x000000;
 
-	PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
+	PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 	// add the canvas to the html document
 	display.appendChild(renderer.view);
