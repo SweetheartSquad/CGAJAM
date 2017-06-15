@@ -239,8 +239,8 @@ function CustomFilter(vertSource, fragSource){
 
 function loadProgressHandler(__loader, __resource){
 	// called during loading
-	console.log('loading: ' + __resource.url);
-	console.log('progress: ' + __loader.progress+'%');
+	//console.log('loading: ' + __resource.url);
+	//console.log('progress: ' + __loader.progress+'%');
 
 	_resize();
 	if(!game.loadingText){

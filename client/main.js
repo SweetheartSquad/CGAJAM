@@ -640,7 +640,7 @@ function parsePassages(__source) {
 
 	var p = __source.split(passageRegex);
 	p.shift(); // remove the first element, which is all text above first passage title
-	console.debug(p);
+	//console.log(p);
 
 	// associate passage bodies to passage titles
 	for(var i = 0; i < p.length; i += 2){
