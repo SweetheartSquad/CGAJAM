@@ -378,9 +378,9 @@ As for your Charon package, well... it's probably too late for a refund, and if 
 ::go2
 "Er... okay. You can go. But please just... mention I have a spa here. To somebody. Anybody. I just want people to know it's here. It would mean the world to me."
 
-[[Yes.|this.hideVideo().then(function {this.yesend=true}.bind(this)).then(this.goto.bind(this,'go3'))]]
-[[No.|this.hideVideo().then(function {this.noend=true}.bind(this)).then(this.noend=true;this.goto.bind(this,'go3'))]]
-[[Maybe.|this.hideVideo().then(function {this.maybeend=true}.bind(this)).then(this.maybeend=true;this.goto.bind(this,'go3'))]]
+[[Yes.|this.hideVideo().then(function() {this.yesend=true}.bind(this)).then(this.goto.bind(this,'go3'))]]
+[[No.|this.hideVideo().then(function() {this.noend=true}.bind(this)).then(this.goto.bind(this,'go3'))]]
+[[Maybe.|this.hideVideo().then(function() {this.maybeend=true}.bind(this)).then(this.goto.bind(this,'go3'))]]
 
 ::go3
 Cairo unties you. You rush out of the estate and get to your ship. As you repair your ship, you decide to extend your Charon getaway. A few days, maybe. A few weeks. Whatever it takes to forget that you ever had the [[misfortune|this.setBg('space').then(this.goto.bind(this, 'go4'))]] of crash-landing on Venus.
