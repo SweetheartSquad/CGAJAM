@@ -795,7 +795,7 @@ function passageToText(__passage, __maxWidth) {
 			}
 
 			// add section with link
-			var outline = 0.5;
+			var outline = 1;
 			temp = new PIXI.Text(wordText,font);
 			if(linkMode){
 				temp.temp = new PIXI.Text(wordText, font);
