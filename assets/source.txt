@@ -12,11 +12,11 @@ A Visitor on Venus
 [[About]]
 
 ::Options
-Palette:      [[CGA0|this.setPalette(0);]]   [[CGA1|this.setPalette(1);]]
-Scaling:      [[1:1|scaleMode=2;_resize();]]   [[scale-to-fit|scaleMode=1;_resize();]]   [[scale-in-multiples|scaleMode=0;_resize();]]
-Fullscreen:  [[toggle|renderer.view.toggleFullscreen = true;]]
-Mute:          [[toggle|toggleMute();]]
-Links:          [[toggle|linkMode=!linkMode;this.goto(this.currentPassage.title).then(this.history.pop.bind(this.history));]]
+Palette:         [[CGA0|this.setPalette(0);]]   [[CGA1|this.setPalette(1);]]
+Scaling:         [[1:1|scaleMode=2;_resize();]]   [[scale-to-fit|scaleMode=1;_resize();]]   [[scale-in-multiples|scaleMode=0;_resize();]]
+Fullscreen:     [[toggle|renderer.view.toggleFullscreen = true;]]
+Mute:             [[toggle|toggleMute();]]
+Link outline:  [[toggle|linkMode=!linkMode;this.goto(this.currentPassage.title).then(this.history.pop.bind(this.history));]]
 [[back|(this.shouldShowVideo ? this.showVideo() : Promise.resolve()).then(this.back.bind(this))]]
 
 ::About
