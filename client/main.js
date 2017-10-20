@@ -12,12 +12,12 @@ function main(){
 	requestAnimationFrame(main);
 }
 
-offWhite = rgbToHex(1.0*255, 0.95*255, 0.95*255);
-linkHover = rgbToHex(150,150,150);
-linkNormal = rgbToHex(0.92*255,0.92*255,255);
 var hover = false;
+var offWhite = rgbToHex(1.0*255, 0.95*255, 0.95*255);
+var linkHover = rgbToHex(150,150,150);
+var linkNormal = rgbToHex(0.92*255,0.92*255,255);
 
-border = {
+var border = {
 	outer: 16,
 	inner: 10
 };
