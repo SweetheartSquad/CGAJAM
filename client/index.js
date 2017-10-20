@@ -198,6 +198,7 @@ ready(function(){
 	PIXI.loader
 		.add('source','assets/source.txt')
 		.add('cursor','assets/cursor.png')
+		.add('pointer','assets/pointer.png')
 		.add('vert','assets/passthrough.vert')
 		.add('screen_shader','assets/screen_shader.frag')
 		.add('greenScreen_shader','assets/greenScreen_shader.frag');

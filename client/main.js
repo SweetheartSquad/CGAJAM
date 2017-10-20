@@ -15,6 +15,7 @@ function main(){
 offWhite = rgbToHex(1.0*255, 0.95*255, 0.95*255);
 linkHover = rgbToHex(150,150,150);
 linkNormal = rgbToHex(0.92*255,0.92*255,255);
+var hover = false;
 
 border = {
 	outer: 16,
@@ -212,6 +213,7 @@ function update(){
 	// (don't use them directly since they may change on click)
 	var links = [];
 	var activePassage = api.currentPassage;
+	var anyHover = false;
 	if(activePassage){
 		var activeLinks = activePassage.links;
 		for(var i = 0; i < activeLinks.length; ++i){
@@ -225,6 +227,7 @@ function update(){
 				height:link.height
 			})){
 				link.tint = linkHover;
+				anyHover = true;
 
 				if(mouse.isJustDown()){
 					links.push(link.onclick.bind(link));
@@ -235,6 +238,18 @@ function update(){
 		}
 		for(var i = 0; i < links.length; ++i){
 			links[i]();
+		}
+	}
+
+	if(anyHover){
+		if(!hover){
+			mouseSprite.texture = mouseSprite2.texture = mouseSprite3.texture = PIXI.loader.resources.pointer.texture;
+			hover=true;
+		}
+	}else{
+		if(hover){
+			mouseSprite.texture = mouseSprite2.texture = mouseSprite3.texture = PIXI.loader.resources.cursor.texture;
+			hover=false;
 		}
 	}
 
