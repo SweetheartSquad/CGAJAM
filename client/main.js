@@ -16,6 +16,7 @@ var hover = false;
 var offWhite = rgbToHex(1.0*255, 0.95*255, 0.95*255);
 var linkHover = rgbToHex(150,150,150);
 var linkNormal = rgbToHex(0.92*255,0.92*255,255);
+var linkMode = false; // colour-blind friendly link mode
 
 var border = {
 	outer: 16,
@@ -230,14 +231,22 @@ function update(){
 				width:link.width,
 				height:link.height
 			})){
-				link.tint = linkHover;
+				if(linkMode){
+					link.alpha = 0.5;
+				}else{
+					link.tint = linkHover;
+				}
 				anyHover = true;
 
 				if(mouse.isJustDown(mouse.LEFT)){
 					links.push(link.onclick.bind(link));
 				}
 			} else {
-				link.tint = linkNormal;
+				if(linkMode){
+					link.alpha = 1.0;
+				}else{
+					link.tint = linkNormal;
+				}
 			}
 		}
 		for(var i = 0; i < links.length; ++i){
@@ -786,7 +795,32 @@ function passageToText(__passage, __maxWidth) {
 			}
 
 			// add section with link
+			var outline = 0.5;
 			temp = new PIXI.Text(wordText,font);
+			if(linkMode){
+				temp.temp = new PIXI.Text(wordText, font);
+				temp.temp.x -= outline;
+				temp.temp.y -= outline;
+				temp.temp.tint = linkNormal;
+				temp.addChild(temp.temp);
+				temp.temp = new PIXI.Text(wordText, font);
+				temp.temp.x += outline;
+				temp.temp.y += outline;
+				temp.temp.tint = linkNormal;
+				temp.addChild(temp.temp);
+				temp.temp.x += outline;
+				temp.temp.y -= outline;
+				temp.temp.tint = linkNormal;
+				temp.addChild(temp.temp);
+				temp.temp = new PIXI.Text(wordText, font);
+				temp.temp.x -= outline;
+				temp.temp.y += outline;
+				temp.temp.tint = linkNormal;
+				temp.addChild(temp.temp);
+				temp.temp = new PIXI.Text(wordText, font);
+				temp.temp.tint = 0x000000;
+				temp.addChild(temp.temp);
+			}
 			temp.x = x;
 			temp.y = y;
 			temp.link = word.link;
