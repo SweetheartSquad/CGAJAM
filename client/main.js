@@ -37,7 +37,11 @@ function init(){
 	keys.init();
 	keys.capture = [keys.LEFT,keys.RIGHT,keys.UP,keys.DOWN,keys.SPACE,keys.ENTER,keys.BACKSPACE,keys.ESCAPE,keys.W,keys.A,keys.S,keys.D,keys.P,keys.M];
 	gamepads.init();
-	mouse.init("canvas");
+	mouse.init({
+		element: "canvas",
+		allowContextMenu: true,
+		capture: [mouse.LEFT]
+	});
 	scaledMouse = {
 		x:0,
 		y:0
@@ -229,7 +233,7 @@ function update(){
 				link.tint = linkHover;
 				anyHover = true;
 
-				if(mouse.isJustDown()){
+				if(mouse.isJustDown(mouse.LEFT)){
 					links.push(link.onclick.bind(link));
 				}
 			} else {
