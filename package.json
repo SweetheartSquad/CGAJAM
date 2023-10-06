@@ -5,6 +5,6 @@
 	"description": "A Visitor on Venus",
 	"author": "SweetHeart Squad <SweetHeartSquad@gmail.com>",
 	"scripts": {
-		"start": "npx http-server --cors -c-1 -p80"
+		"start": "npx http-server src --cors -c-1 -p80"
 	}
 }
