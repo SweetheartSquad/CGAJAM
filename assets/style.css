@@ -1,58 +1,60 @@
 @font-face {
-  font-family: 'font';
-  font-style: normal;
-  font-weight: normal;
-  src: url('font/Amaranth-Regular.otf');
+	font-family: 'font';
+	font-style: normal;
+	font-weight: normal;
+	src: url('font/Amaranth-Regular.otf');
 }
 
-*{
+* {
 	font-family: 'font';
 }
 
-html,body,#display{
-	padding:0;
-	margin:0;
-	
-	width:100%;
-	height:100%;
+html,
+body,
+#display {
+	padding: 0;
+	margin: 0;
 
-	top:0;
-	left:0;
-	right:0;
-	bottom:0;
+	width: 100%;
+	height: 100%;
 
-	background:#000000;
-	color:#FFFF55;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 
-	overflow:hidden;
+	background: #000000;
+	color: #FFFF55;
+
+	overflow: hidden;
 
 	min-width: 400px;
 	min-height: 300px;
 }
 
-html{
-	overflow:hidden;
+html {
+	overflow: hidden;
 }
 
-canvas{
+canvas {
 	image-rendering: optimizeSpeed;
-    image-rendering: -o-crisp-edges;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: optimize-contrast;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
-    -ms-interpolation-mode: nearest-neighbor;
+	image-rendering: -o-crisp-edges;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: optimize-contrast;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+	-ms-interpolation-mode: nearest-neighbor;
 
-	position:absolute;
-	margin:auto;
-	top:0;
-	left:0;
-	right:0;
-	bottom:0;
+	position: absolute;
+	margin: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 
 	/*https://stackoverflow.com/questions/1361404/web-browser-hide-mouse-cursor*/
-    cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjbQg61aAAAADUlEQVQYV2P4//8/IwAI/QL/+TZZdwAAAABJRU5ErkJggg=='),
-    url(images/blank.cur),
-    none !important;
+	cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjbQg61aAAAADUlEQVQYV2P4//8/IwAI/QL/+TZZdwAAAABJRU5ErkJggg=='),
+		url(images/blank.cur),
+		none !important;
 }
