@@ -106,7 +106,7 @@ var mouse={
 		this.delta.y = this.pos.y - this.prev.y;
 	},
 	on_wheel: function(event){
-		this.mouseWheel = event.deltaY || event.originalEvent.wheelDelta;
+		this.mouseWheel = event.deltaY || (event.originalEvent && event.originalEvent.wheelDelta);
 	},
 	on_contextmenu: function(event){
 		event.preventDefault();
