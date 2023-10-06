@@ -196,7 +196,7 @@ ready(function(){
 		'garden3'
 	];
 	PIXI.loader
-		.add('source','assets/source.txt')
+		.add('source','assets/source.strand')
 		.add('cursor','assets/cursor.png')
 		.add('pointer','assets/pointer.png')
 		.add('vert','assets/passthrough.vert')
