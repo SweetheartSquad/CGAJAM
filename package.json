@@ -1,0 +1,10 @@
+{
+	"private": true,
+	"name": "a-visitor-on-venus",
+	"version": "2.0.0",
+	"description": "A Visitor on Venus",
+	"author": "SweetHeart Squad <SweetHeartSquad@gmail.com>",
+	"scripts": {
+		"start": "npx http-server --cors -c-1 -p80"
+	}
+}
