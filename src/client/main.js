@@ -124,6 +124,14 @@ function init(){
 				resource.data.volume = 0;
 				resource.data.muted = true;
 				resource.data.autoplay = false;
+				resource.data.preload = 'auto';
+				resource.data.style.position = 'absolute';
+				resource.data.style.top = '0';
+				resource.data.style.right = '0';
+				resource.data.style.width = '1px';
+				resource.data.style.height = '1px';
+				resource.data.style.opacity = '0.001';
+				document.body.appendChild(resource.data);
 			}
 		}
 	}
