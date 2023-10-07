@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "a-visitor-on-venus",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "A Visitor on Venus",
 	"author": "SweetHeart Squad <SweetHeartSquad@gmail.com>",
 	"scripts": {
