@@ -9,7 +9,7 @@ env:
   ITCH_USER: sweetheartsquad
   ITCH_GAME: a-visitor-on-venus
   DISCORD_USERNAME: ${{ github.repository }}
-  DISCORD_AVATAR: https://raw.githubusercontent.com/${{ github.repository }}/main/assets/icon.png
+  DISCORD_AVATAR: https://raw.githubusercontent.com/${{ github.repository }}/main/src/assets/icon.png
 
 jobs:
   release:
