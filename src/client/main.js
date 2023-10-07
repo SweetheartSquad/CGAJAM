@@ -131,6 +131,8 @@ function init(){
 				resource.data.style.width = '1px';
 				resource.data.style.height = '1px';
 				resource.data.style.opacity = '0.001';
+				resource.texture = PIXI.VideoBaseTexture.fromVideo(resource.data);
+				resource.texture.mipmap = false;
 				document.body.appendChild(resource.data);
 			}
 		}
@@ -445,23 +447,10 @@ Game.prototype.setVideo = function(__video) {
 	return this.hideVideo()
 	.then(function(){
 		// swap video
-		video.video = PIXI.loader.resources[__video].data;
-		greenScreen_filter.uniforms["uScreenMode"] = PIXI.loader.resources[__video].metadata.screenMode;
-		if(video.baseTexture){
-			video.baseTexture.destroy();
-		}
-		if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
-			// hack for firefox: use the fromUrl instead of pre-loaded data
-			video.baseTexture = PIXI.VideoBaseTexture.fromUrl({
-				src: 'assets/video/'+__video+'.mp4',
-				mime: 'video/mp4'
-			});
-			video.baseTexture.source.loop = true;
-		}else{
-			video.baseTexture = PIXI.VideoBaseTexture.fromVideo(video.video);
-		}
-		video.baseTexture.mipmap = false;
-		video.texture.baseTexture = video.baseTexture;
+		var v = PIXI.loader.resources[__video];
+		video.video = v.data;
+		greenScreen_filter.uniforms["uScreenMode"] = v.metadata.screenMode;
+		video.texture.baseTexture = v.texture;
 	})
 	.then(this.showVideo.bind(this));
 };
